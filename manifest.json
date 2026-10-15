@@ -1,0 +1,17 @@
+{
+  "name": "Alif — Arabe littéraire",
+  "short_name": "Alif",
+  "description": "Apprendre l'arabe littéraire hors ligne : alphabet, lecture, vocabulaire, verbes, phrases et conversations.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f1626",
+  "theme_color": "#0f7b6c",
+  "lang": "fr",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f7b6c">
+<title>Alif — Arabe littéraire</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Alif">
+<style>
+:root{
+  --bg:#edf2f0; --card:#ffffff; --ink:#18233a; --muted:#5d6b7e; --line:#d5dfdb;
+  --accent:#0f7b6c; --accent-ink:#ffffff; --soft:#dcebe7; --saffron:#c98a17; --saffron-bg:#fbefd6;
+  --ok:#1f7a45; --ok-bg:#dff1e6; --ko:#b3412f; --ko-bg:#f8e1dc;
+  --ar-size:44px; color-scheme:light;
+  --ar-font:"Geeza Pro","Noto Naskh Arabic","Noto Sans Arabic","Amiri","Traditional Arabic","Segoe UI","Arial",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1626; --card:#18213a; --ink:#e8ecf4; --muted:#9aa6ba; --line:#2a3653;
+    --accent:#3fc1a8; --accent-ink:#0b1a17; --soft:#1d3340; --saffron:#f0be5a; --saffron-bg:#3a2f17;
+    --ok:#6fd39a; --ok-bg:#16352a; --ko:#f08b78; --ko-bg:#3d2220; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1626; --card:#18213a; --ink:#e8ecf4; --muted:#9aa6ba; --line:#2a3653;
+  --accent:#3fc1a8; --accent-ink:#0b1a17; --soft:#1d3340; --saffron:#f0be5a; --saffron-bg:#3a2f17;
+  --ok:#6fd39a; --ok-bg:#16352a; --ko:#f08b78; --ko-bg:#3d2220; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:84px;-webkit-text-size-adjust:100%}
+h1,h2,h3{line-height:1.25;margin:0 0 .3em}
+h1{font-size:1.5rem} h2{font-size:1.15rem} h3{font-size:1.05rem}
+p{margin:.4em 0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--saffron);outline-offset:2px}
+.top{position:sticky;top:0;z-index:20;background:var(--bg);display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700}
+.brand .ar{font-size:30px;line-height:1;color:var(--accent)}
+.back{border:0;background:var(--card);border:1px solid var(--line);border-radius:999px;width:40px;height:40px;cursor:pointer;font-size:18px}
+.streak{margin-left:auto;font-size:14px;color:var(--muted);white-space:nowrap}
+main{max-width:720px;margin:0 auto;padding:16px}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px))}
+.tabs button{background:none;border:0;color:var(--muted);font-size:12px;display:flex;flex-direction:column;align-items:center;gap:1px;padding:4px 12px;cursor:pointer;min-width:64px}
+.tabs button span{font-size:20px;line-height:1.2}
+.tabs button.on{color:var(--accent);font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:0 0 12px}
+.ar{font-family:var(--ar-font);direction:rtl;unicode-bidi:isolate;line-height:1.75}
+.big{font-size:calc(var(--ar-size)*1.7)}
+.mid{font-size:var(--ar-size)}
+.sm{font-size:calc(var(--ar-size)*.6)}
+.small{font-size:.875rem}
+.muted{color:var(--muted)}
+.tr{color:var(--muted);font-style:italic}
+body.no-tr .tr{display:none}
+.center{text-align:center;justify-content:center}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.between{justify-content:space-between}
+.btn{appearance:none;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;cursor:pointer;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn:hover{border-color:var(--accent)}
+.btn.sm{min-height:38px;padding:6px 11px;font-size:.9rem;border-radius:999px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.ghost{background:transparent}
+.btn.block{display:flex;width:100%;margin-top:8px}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.on{background:var(--soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.hero{display:flex;gap:16px;align-items:center;background:var(--accent);color:var(--accent-ink);border:0}
+.hero .ar{font-size:64px;line-height:1.1}
+.hero p{opacity:.85}
+.review-card{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.mhead{display:flex;align-items:flex-start;gap:12px;margin-bottom:6px}
+.mnum{flex:none;width:34px;height:34px;border-radius:50%;background:var(--soft);color:var(--accent);display:grid;place-items:center;font-weight:700}
+.mprog{margin-left:auto;font-size:.875rem;color:var(--muted)}
+.module.is-locked{opacity:.6}
+.lesson{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:10px 4px;cursor:pointer;min-height:52px}
+.lesson:disabled{cursor:default;opacity:.5}
+.lesson .lst{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:14px;background:var(--bg);flex:none}
+.lesson.done .lst{background:var(--ok-bg);color:var(--ok);font-weight:700}
+.lesson .ltitle{flex:1}
+.ltitle .ar{font-size:1.45em;line-height:1.2}
+.lscore{font-size:.85rem;color:var(--muted)}
+.letter .lhead{display:flex;gap:16px;align-items:center}
+.glyph{flex:none;width:112px;height:112px;border-radius:24px;background:var(--soft);border:0;font-size:76px;line-height:1;color:var(--accent);cursor:pointer;display:grid;place-items:center;font-family:var(--ar-font)}
+.forms{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;background:var(--bg);border-radius:14px;padding:6px;margin:10px 0}
+.forms .ar{font-size:calc(var(--ar-size)*.9)}
+.tip{background:var(--soft);border-radius:10px;padding:8px 10px}
+.warn{background:var(--saffron-bg);border-radius:10px;padding:8px 10px}
+.example{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:8px;margin-top:8px}
+.example .ar{font-size:calc(var(--ar-size)*.8)}
+.rec{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.rec.recording [data-act="rec"]{background:var(--ko);color:#fff;border-color:var(--ko)}
+.progress{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.progress>i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.qprompt{font-size:1.05rem;font-weight:600;margin-bottom:6px}
+.qprompt .ar{font-weight:400}
+.show{text-align:center;margin:6px 0 12px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{border:2px solid var(--line);background:var(--card);border-radius:14px;padding:10px;min-height:72px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.opt:hover{border-color:var(--accent)}
+.opt.ok{background:var(--ok-bg);border-color:var(--ok)}
+.opt.ko{background:var(--ko-bg);border-color:var(--ko)}
+.opt .ar{line-height:1.5}
+.fb{margin-top:12px;padding:10px 12px;border-radius:12px}
+.fb.ok{background:var(--ok-bg)} .fb.ko{background:var(--ko-bg)}
+.fb b{display:block}
+.score{font-size:56px;font-weight:700;text-align:center;color:var(--accent);margin:6px 0}
+.reader-word{text-align:center;margin:4px 0}
+.seg{border-radius:8px;transition:background .15s,color .15s}
+.seg.hl{background:var(--saffron-bg);color:var(--saffron)}
+.seg.mute{color:var(--muted);opacity:.45}
+.seg.root{color:var(--saffron);font-weight:700}
+.wordgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.wchip{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:6px;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.wchip .ar{font-size:calc(var(--ar-size)*.7);line-height:1.5}
+.wchip.on{border-color:var(--accent);background:var(--soft)}
+.overflow{overflow-x:auto}
+table.syl{border-collapse:separate;border-spacing:4px;margin:0 auto}
+table.syl th{font-weight:600;color:var(--muted);font-size:.85rem}
+table.syl td:first-child{font-family:var(--ar-font);font-size:calc(var(--ar-size)*.6);color:var(--muted);text-align:center}
+.sylb{border:1px solid var(--line);background:var(--card);border-radius:10px;min-width:54px;min-height:48px;cursor:pointer;font-family:var(--ar-font);font-size:calc(var(--ar-size)*.6)}
+.sylb:hover{border-color:var(--accent)}
+.pairs{display:flex;flex-wrap:wrap;gap:8px}
+.pair{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.pair button{border:0;background:var(--card);padding:4px 14px;cursor:pointer;font-family:var(--ar-font);font-size:calc(var(--ar-size)*.6)}
+.pair button+button{border-left:1px solid var(--line)}
+table.conj{width:100%;border-collapse:collapse}
+table.conj td{padding:4px 6px;border-top:1px solid var(--line);vertical-align:middle}
+table.conj td.ar{font-size:calc(var(--ar-size)*.55)}
+table.conj td.form{font-size:calc(var(--ar-size)*.75)}
+.sentence{display:flex;flex-wrap:wrap;gap:6px;direction:rtl;justify-content:center;margin:6px 0}
+.wbtn{border:1px solid transparent;background:var(--bg);border-radius:12px;padding:2px 10px;cursor:pointer;font-family:var(--ar-font);font-size:calc(var(--ar-size)*.75);line-height:1.6}
+.wbtn.on{border-color:var(--saffron);background:var(--saffron-bg)}
+.winfo{background:var(--bg);border-radius:12px;padding:8px 12px;margin-top:6px}
+.orderzone{min-height:72px;border:2px dashed var(--line);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;direction:rtl;justify-content:center;align-items:center;margin-bottom:10px}
+.chat{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.bubble{max-width:88%;border-radius:18px;padding:10px 14px;border:1px solid var(--line);background:var(--card)}
+.bubble.npc{align-self:flex-start;border-bottom-left-radius:6px}
+.bubble.me{align-self:flex-end;background:var(--soft);border-color:var(--accent);border-bottom-right-radius:6px}
+.bubble .who{font-size:.8rem;color:var(--muted)}
+.bubble .ar{font-size:calc(var(--ar-size)*.65)}
+.corr{align-self:flex-end;max-width:88%;font-size:.9rem;background:var(--saffron-bg);border-radius:12px;padding:6px 10px}
+.choices{display:grid;gap:8px}
+.choice{border:2px solid var(--line);background:var(--card);border-radius:14px;padding:8px 12px;cursor:pointer;text-align:right}
+.choice:hover{border-color:var(--accent)}
+.choice.ko{background:var(--ko-bg);border-color:var(--ko)}
+.choice .ar{font-size:calc(var(--ar-size)*.6);display:block}
+.choice .tr,.choice .fr{display:block;text-align:left}
+.chatbar{display:flex;gap:6px;position:sticky;bottom:76px}
+.chatbar input{flex:1;min-height:44px;border:1px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--card);color:var(--ink);font:inherit;font-family:var(--ar-font),system-ui}
+label.set{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+label.set input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent)}
+select,input[type=text],input[type=password]{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;max-width:60%}
+input[type=range]{accent-color:var(--accent);width:50%}
+details{margin-top:8px} summary{cursor:pointer;font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:var(--bg);border-radius:14px;padding:12px}
+.stat b{display:block;font-size:1.6rem;color:var(--accent)}
+.weak{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:6px 0}
+.weak .ar{font-size:calc(var(--ar-size)*.6)}
+#modal{position:fixed;inset:0;background:rgba(10,15,30,.55);display:none;z-index:50;align-items:flex-end;justify-content:center}
+#modal.on{display:flex}
+.sheet{background:var(--card);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:94vh;overflow:auto}
+canvas.trace{display:block;width:100%;max-width:360px;aspect-ratio:1;margin:8px auto;touch-action:none;border:2px dashed var(--line);border-radius:18px;background:var(--bg)}
+#toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90%;z-index:60;text-align:center}
+#toast.on{opacity:1}
+.banner{border-left:4px solid var(--saffron);background:var(--saffron-bg)}
+@media (max-width:420px){.glyph{width:92px;height:92px;font-size:62px}.opts{gap:8px}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="back" id="backBtn" data-act="back" aria-label="Retour" hidden>‹</button>
+  <div class="brand"><span class="ar" lang="ar">أَلِف</span><span>Alif</span></div>
+  <div class="streak" id="streak"></div>
+</header>
+<main id="app"><div class="card banner"><b>L’application ne s’est pas lancée.</b><p>Le lecteur utilisé bloque le JavaScript (c’est le cas du « Lecteur HTML » intégré à Android). Ouvre ce fichier avec <b>Chrome</b> : dans Mes fichiers, appui long sur le fichier › ⋮ › Ouvrir avec › Chrome.</p></div></main>
+<script>
+window.addEventListener('error', function(e){ var a=document.getElementById('app'); if(a) a.insertAdjacentHTML('afterbegin','<div class="card banner"><b>Erreur au démarrage</b><p class="small">'+String(e.message).replace(/</g,'&lt;')+' (ligne '+e.lineno+')</p><p class="small">Envoie une capture de ce message.</p></div>'); });
+</script>
+<nav class="tabs" id="tabs">
+  <button data-act="tab" data-arg="home"><span>⌂</span>Parcours</button>
+  <button data-act="tab" data-arg="review"><span>↻</span>Révision</button>
+  <button data-act="tab" data-arg="stats"><span>▤</span>Progrès</button>
+  <button data-act="tab" data-arg="settings"><span>⚙</span>Réglages</button>
+</nav>
+<div id="modal"></div>
+<div id="toast" role="status"></div>
+<input type="file" id="importFile" accept="application/json,.json" hidden>
+<script>
+'use strict';
+/* =========================================================================
+   CONTENU PÉDAGOGIQUE — à enrichir ici (modules 3 à 6 : 3 exemples chacun)
+   ========================================================================= */
+const DATA = {
+letters: [
+ {c:'ا',n:'alif',na:'أَلِف',t:'ā',tc:'',fr:'« a » long ; sert aussi de support à la hamza (أ)',s:'آ',conn:false,mn:'Un simple trait vertical.',trap:'Ne se lie jamais à la lettre suivante.',ex:['بَاب','bāb','porte']},
+ {c:'ب',n:'bāʾ',na:'بَاء',t:'b',tc:'b',fr:'b de « bateau »',s:'بَا',conn:true,mn:'Une barque avec 1 point en dessous.',trap:'Même squelette que ت ث ن ي : seuls les points changent.',ex:['بَيْت','bayt','maison']},
+ {c:'ت',n:'tāʾ',na:'تَاء',t:'t',tc:'t',fr:'t de « table »',s:'تَا',conn:true,mn:'La barque avec 2 points au-dessus.',trap:'À ne pas confondre avec ط (t emphatique, plus grave).',ex:['تُفَّاح','tuffāḥ','pommes']},
+ {c:'ث',n:'thāʾ',na:'ثَاء',t:'th',tc:'th',fr:'« th » anglais de « think »',s:'ثَا',conn:true,mn:'3 points = « th » comme « three ».',trap:'Ni « s » ni « t » : la langue passe entre les dents.',ex:['ثَلَاثَة','thalātha','trois']},
+ {c:'ج',n:'jīm',na:'جِيم',t:'j',tc:'j',fr:'« dj » de « djinn »',s:'جَا',conn:true,mn:'Un crochet avec 1 point dans le ventre.',trap:'Même forme que ح et خ : regarde où est le point.',ex:['جَمَل','jamal','chameau']},
+ {c:'ح',n:'ḥāʾ',na:'حَاء',t:'ḥ',tc:'ḥ',fr:'h soufflé du fond de la gorge, gorge serrée (comme pour embuer fortement une vitre)',s:'حَا',conn:true,mn:'Le crochet sans point.',trap:'Différent de ه (h léger) et de خ (raclé).',ex:['حَلِيب','ḥalīb','lait']},
+ {c:'خ',n:'khāʾ',na:'خَاء',t:'kh',tc:'kh',fr:'« jota » espagnole, « ch » allemand de « Bach »',s:'خَا',conn:true,mn:'Le crochet avec 1 point au-dessus.',trap:'Raclé et sans vibration de la voix, contrairement à غ.',ex:['خُبْز','khubz','pain']},
+ {c:'د',n:'dāl',na:'دَال',t:'d',tc:'d',fr:'d de « dé »',s:'دَا',conn:false,mn:'Un petit angle, comme un genou plié.',trap:'Ne se lie pas à la suivante. À distinguer de ض (d emphatique).',ex:['دَرْس','dars','leçon']},
+ {c:'ذ',n:'dhāl',na:'ذَال',t:'dh',tc:'dh',fr:'« th » anglais de « this »',s:'ذَا',conn:false,mn:'Le genou de د avec 1 point.',trap:'Pas un « z » : la langue passe entre les dents.',ex:['ذَهَب','dhahab','or']},
+ {c:'ر',n:'rāʾ',na:'رَاء',t:'r',tc:'r',fr:'r roulé (espagnol, italien)',s:'رَا',conn:false,mn:'Une virgule qui descend sous la ligne.',trap:'Toujours roulé : le r français correspond à غ.',ex:['رَجُل','rajul','homme']},
+ {c:'ز',n:'zāy',na:'زَاي',t:'z',tc:'z',fr:'z de « zéro »',s:'زَا',conn:false,mn:'Le ر avec 1 point.',trap:'Ne pas confondre avec ذ (dh).',ex:['زَيْت','zayt','huile']},
+ {c:'س',n:'sīn',na:'سِين',t:'s',tc:'s',fr:'s de « sac »',s:'سَا',conn:true,mn:'3 petites dents.',trap:'À distinguer de ص (s emphatique, plus grave).',ex:['سَمَك','samak','poisson']},
+ {c:'ش',n:'shīn',na:'شِين',t:'sh',tc:'sh',fr:'« ch » de « chat »',s:'شَا',conn:true,mn:'Les 3 dents + 3 points : « ch-ch-ch ».',trap:'',ex:['شَمْس','shams','soleil']},
+ {c:'ص',n:'ṣād',na:'صَاد',t:'ṣ',tc:'ṣ',fr:'s emphatique : langue basse, son grave et plein',s:'صَا',conn:true,mn:'Une boucle couchée suivie d’une petite dent.',trap:'Les emphatiques assombrissent la voyelle : صَا sonne presque « so ».',ex:['صَبَاح','ṣabāḥ','matin']},
+ {c:'ض',n:'ḍād',na:'ضَاد',t:'ḍ',tc:'ḍ',fr:'d emphatique',s:'ضَا',conn:true,mn:'La boucle de ص avec 1 point.',trap:'L’arabe est surnommé « la langue du ḍād » : son propre à l’arabe.',ex:['ضَيْف','ḍayf','invité']},
+ {c:'ط',n:'ṭāʾ',na:'طَاء',t:'ṭ',tc:'ṭ',fr:'t emphatique',s:'طَا',conn:true,mn:'Une boucle avec une tige verticale.',trap:'Plus grave que ت.',ex:['طَاوِلَة','ṭāwila','table']},
+ {c:'ظ',n:'ẓāʾ',na:'ظَاء',t:'ẓ',tc:'ẓ',fr:'« dh » emphatique',s:'ظَا',conn:true,mn:'Le ط avec 1 point.',trap:'Version emphatique de ذ.',ex:['ظُهْر','ẓuhr','midi']},
+ {c:'ع',n:'ʿayn',na:'عَيْن',t:'ʿ',tc:'ʿ',fr:'contraction du fond de la gorge, voix tendue : aucun équivalent en français',s:'عَا',conn:true,mn:'Un « c » ouvert avec une queue.',trap:'Ne pas l’ignorer ni le confondre avec la hamza (ء), simple coup de glotte.',ex:['عَيْن','ʿayn','œil']},
+ {c:'غ',n:'ghayn',na:'غَيْن',t:'gh',tc:'gh',fr:'r grasseyé à la française (« Paris »)',s:'غَا',conn:true,mn:'Le ع avec 1 point.',trap:'Ton r français, c’est ce son-là.',ex:['غُرْفَة','ghurfa','chambre']},
+ {c:'ف',n:'fāʾ',na:'فَاء',t:'f',tc:'f',fr:'f de « fil »',s:'فَا',conn:true,mn:'Une petite tête ronde avec 1 point au-dessus.',trap:'Ne pas confondre avec ق (2 points, descend plus bas).',ex:['فِيل','fīl','éléphant']},
+ {c:'ق',n:'qāf',na:'قَاف',t:'q',tc:'q',fr:'k très profond, au fond de la gorge',s:'قَا',conn:true,mn:'La tête de ف avec 2 points et une queue plus creuse.',trap:'Différent de ك : قَلْب (cœur) ≠ كَلْب (chien).',ex:['قَلَم','qalam','stylo']},
+ {c:'ك',n:'kāf',na:'كَاف',t:'k',tc:'k',fr:'k de « kilo »',s:'كَا',conn:true,mn:'Un angle avec une petite hamza à l’intérieur.',trap:'',ex:['كِتَاب','kitāb','livre']},
+ {c:'ل',n:'lām',na:'لَام',t:'l',tc:'l',fr:'l de « lune »',s:'لَا',conn:true,mn:'Une grande tige avec un crochet.',trap:'ل suivi de ا s’écrit en ligature : لا.',ex:['لَيْل','layl','nuit']},
+ {c:'م',n:'mīm',na:'مِيم',t:'m',tc:'m',fr:'m de « mer »',s:'مَا',conn:true,mn:'Une petite boucle avec une queue.',trap:'',ex:['مَاء','māʾ','eau']},
+ {c:'ن',n:'nūn',na:'نُون',t:'n',tc:'n',fr:'n de « nez »',s:'نَا',conn:true,mn:'Un bol profond avec 1 point au-dessus.',trap:'En début et milieu de mot, il ressemble à ب ت ث ي : compte les points.',ex:['نُور','nūr','lumière']},
+ {c:'ه',n:'hāʾ',na:'هَاء',t:'h',tc:'h',fr:'h aspiré léger, comme l’anglais « hello »',s:'هَا',conn:true,mn:'Forme très changeante : rond isolé, « oreilles de chat » en début de mot.',trap:'Toujours prononcé, jamais muet. Plus léger que ح.',ex:['هَوَاء','hawāʾ','air']},
+ {c:'و',n:'wāw',na:'وَاو',t:'w / ū',tc:'w',fr:'w de « whisky » ou « ou » long',s:'وَا',conn:false,mn:'Une petite tête ronde avec une queue.',trap:'Consonne (w) ou voyelle longue (ū) selon le contexte.',ex:['وَلَد','walad','garçon']},
+ {c:'ي',n:'yāʾ',na:'يَاء',t:'y / ī',tc:'y',fr:'y de « yoyo » ou « i » long',s:'يَا',conn:true,mn:'2 points en dessous.',trap:'Consonne (y) ou voyelle longue (ī) selon le contexte.',ex:['يَد','yad','main']}
+],
+// Lettres facilement confondues (servent de distracteurs prioritaires)
+conf: {'ا':['ل','ع','ه'],'ب':['ت','ث','ن','ي'],'ت':['ث','ب','ط','ن'],'ث':['ت','س','ذ','ب'],'ج':['ح','خ','ي'],'ح':['ه','خ','ج','ع'],'خ':['ح','غ','ج','ك'],'د':['ذ','ض','ر'],'ذ':['د','ز','ظ','ث'],'ر':['ز','غ','د'],'ز':['ر','ذ','ظ','س'],'س':['ص','ش','ث'],'ش':['س','ج'],'ص':['س','ض','ط'],'ض':['ص','د','ظ'],'ط':['ت','ظ','ص'],'ظ':['ط','ذ','ض','ز'],'ع':['غ','ا','ح'],'غ':['ع','خ','ر'],'ف':['ق','ث'],'ق':['ك','ف','غ'],'ك':['ق','خ'],'ل':['ا','ن'],'م':['ن','ب'],'ن':['ب','ت','م'],'ه':['ح'],'و':['ف','ا'],'ي':['ب','ن']},
+signs: [
+ {id:'fatha',name:'fatha',demo:'بَ',t:'ba',d:'Petit trait au-dessus de la lettre : son « a ».',ex:['قَلَم','qalam','stylo']},
+ {id:'kasra',name:'kasra',demo:'بِ',t:'bi',d:'Petit trait en dessous : son « i ».',ex:['بِنْت','bint','fille']},
+ {id:'damma',name:'damma',demo:'بُ',t:'bu',d:'Petit و au-dessus : son « ou ».',ex:['خُبْز','khubz','pain']},
+ {id:'sukun',name:'sukūn',demo:'بْ',t:'b',d:'Petit rond : la consonne n’a pas de voyelle.',ex:['كَلْب','kalb','chien']},
+ {id:'shadda',name:'shadda',demo:'بّ',t:'bb',d:'Petit « w » au-dessus : la consonne est doublée (on appuie dessus).',ex:['حُبّ','ḥubb','amour']},
+ {id:'tanwin',name:'tanwīn',demo:'بٌ بٍ بً',t:'bun bin ban',d:'Voyelle doublée = voyelle + « n ». Marque l’indéfini (« un »).',ex:['كِتَابٌ','kitābun','un livre']},
+ {id:'longues',name:'voyelles longues',demo:'بَا بِي بُو',t:'bā bī bū',d:'ا, ي et و allongent la voyelle : ā, ī, ū.',ex:['نُور','nūr','lumière']},
+ {id:'hamza',name:'hamza',demo:'ء أ إ ؤ ئ',t:'ʾ',d:'Coup de glotte, la petite coupure de « uh-oh ». Elle se pose seule ou sur ا, و, ي.',ex:['سَأَلَ','saʾala','il a demandé']},
+ {id:'tamarbuta',name:'tāʾ marbūṭa',demo:'ة',t:'-a / -at',d:'« t » final du féminin, prononcé « a » en fin de phrase.',ex:['مَدْرَسَة','madrasa','école']},
+ {id:'solaire',name:'ال + lettre solaire',demo:'الشَّمْس',t:'ash-shams',d:'Le ل de l’article ne se prononce pas : la lettre suivante est doublée. Lettres solaires : ت ث د ذ ر ز س ش ص ض ط ظ ل ن.',ex:['الشَّمْس','ash-shams','le soleil']},
+ {id:'lunaire',name:'ال + lettre lunaire',demo:'الْقَمَر',t:'al-qamar',d:'Le ل de l’article se prononce normalement devant les autres lettres.',ex:['الْقَمَر','al-qamar','la lune']}
+],
+sunLetters:'ت ث د ذ ر ز س ش ص ض ط ظ ل ن',
+moonLetters:'ا ب ج ح خ ع غ ف ق ك م ه و ي',
+// [mot vocalisé, translittération, sens, découpage syllabique]
+words: [
+ ['بَيْت','bayt','maison',['بَيْت']],['وَلَد','walad','garçon',['وَ','لَد']],['بِنْت','bint','fille',['بِنْت']],
+ ['قَلَم','qalam','stylo',['قَ','لَم']],['كِتَاب','kitāb','livre',['كِ','تَاب']],['بَاب','bāb','porte',['بَاب']],
+ ['رَجُل','rajul','homme',['رَ','جُل']],['جَمَل','jamal','chameau',['جَ','مَل']],['سَمَك','samak','poisson',['سَ','مَك']],
+ ['قَمَر','qamar','lune',['قَ','مَر']],['شَمْس','shams','soleil',['شَمْس']],['مَاء','māʾ','eau',['مَاء']],
+ ['خُبْز','khubz','pain',['خُبْز']],['حَلِيب','ḥalīb','lait',['حَ','لِيب']],['قَهْوَة','qahwa','café',['قَهْ','وَة']],
+ ['شَاي','shāy','thé',['شَاي']],['صَدِيق','ṣadīq','ami',['صَ','دِيق']],['نَعَم','naʿam','oui',['نَ','عَم']],
+ ['لَا','lā','non',['لَا']],['شُكْرًا','shukran','merci',['شُكْ','رًا']],['عَيْن','ʿayn','œil',['عَيْن']],
+ ['يَد','yad','main',['يَد']],['بَحْر','baḥr','mer',['بَحْر']],['نُور','nūr','lumière',['نُور']],
+ ['مَدْرَسَة','madrasa','école',['مَدْ','رَ','سَة']],['سَيَّارَة','sayyāra','voiture',['سَيَّا','رَة']],['طَاوِلَة','ṭāwila','table',['طَا','وِ','لَة']],
+ ['مِفْتَاح','miftāḥ','clé',['مِفْ','تَاح']],['غُرْفَة','ghurfa','chambre',['غُرْ','فَة']],['ذَهَب','dhahab','or',['ذَ','هَب']],
+ ['ثَلَاثَة','thalātha','trois',['ثَ','لَا','ثَة']],['ضَيْف','ḍayf','invité',['ضَيْف']],['ظُهْر','ẓuhr','midi',['ظُهْر']],
+ ['فِيل','fīl','éléphant',['فِيل']],['زَيْت','zayt','huile',['زَيْت']]
+],
+alWords: [
+ {ar:'الشَّمْس',t:'ash-shams',fr:'le soleil',sun:1},{ar:'الْقَمَر',t:'al-qamar',fr:'la lune',sun:0},
+ {ar:'الْبَيْت',t:'al-bayt',fr:'la maison',sun:0},{ar:'النُّور',t:'an-nūr',fr:'la lumière',sun:1},
+ {ar:'الْكِتَاب',t:'al-kitāb',fr:'le livre',sun:0},{ar:'الدَّرْس',t:'ad-dars',fr:'la leçon',sun:1},
+ {ar:'السَّمَك',t:'as-samak',fr:'le poisson',sun:1},{ar:'الْوَلَد',t:'al-walad',fr:'le garçon',sun:0},
+ {ar:'الرَّجُل',t:'ar-rajul',fr:'l’homme',sun:1},{ar:'الْجَمَل',t:'al-jamal',fr:'le chameau',sun:0}
+],
+// MODULE 3 — aperçu (à compléter jusqu’à ~300 mots)
+vocab: [
+ {ar:'مَرْحَبًا',t:'marḥaban',fr:'bonjour',root:'ر ح ب',theme:'Salutations',ex:{ar:'مَرْحَبًا يَا صَدِيقِي',t:'marḥaban yā ṣadīqī',fr:'Bonjour mon ami'}},
+ {ar:'شُكْرًا',t:'shukran',fr:'merci',root:'ش ك ر',theme:'Salutations',ex:{ar:'شُكْرًا جَزِيلًا',t:'shukran jazīlan',fr:'Merci beaucoup'}},
+ {ar:'كِتَاب',t:'kitāb',fr:'livre',root:'ك ت ب',theme:'Objets',ex:{ar:'هَذَا كِتَابٌ جَدِيدٌ',t:'hādhā kitābun jadīdun',fr:'C’est un livre neuf'}}
+],
+roots: [
+ {root:'ك ت ب',sense:'l’idée d’écrire',family:[['كَتَبَ','kataba','il a écrit'],['كَاتِب','kātib','écrivain'],['كِتَاب','kitāb','livre'],['مَكْتَب','maktab','bureau'],['مَكْتَبَة','maktaba','bibliothèque, librairie']]}
+],
+// MODULE 4 — aperçu : verbes réguliers de forme I (conjugaison générée automatiquement)
+verbs: [
+ {root:['ك','ت','ب'],v:'ُ',past:'كَتَبَ',pres:'يَكْتُبُ',t:'kataba / yaktubu',fr:'écrire'},
+ {root:['ذ','ه','ب'],v:'َ',past:'ذَهَبَ',pres:'يَذْهَبُ',t:'dhahaba / yadhhabu',fr:'aller, partir'},
+ {root:['ج','ل','س'],v:'ِ',past:'جَلَسَ',pres:'يَجْلِسُ',t:'jalasa / yajlisu',fr:'s’asseoir'}
+],
+// MODULE 5 — aperçu : [mot, translittération, sens, racine]
+sentences: [
+ {ar:'أَنَا أَكْتُبُ رِسَالَةً',t:'anā aktubu risālatan',fr:'J’écris une lettre.',note:'Le pronom أَنَا est facultatif : أَكْتُبُ suffit à dire « j’écris ».',words:[['أَنَا','anā','je, moi',''],['أَكْتُبُ','aktubu','j’écris','ك ت ب'],['رِسَالَةً','risālatan','une lettre, un message','ر س ل']]},
+ {ar:'ذَهَبَ الْوَلَدُ إِلَى الْمَدْرَسَةِ',t:'dhahaba l-waladu ilā l-madrasati',fr:'Le garçon est allé à l’école.',note:'Phrase verbale : le verbe vient souvent en premier.',words:[['ذَهَبَ','dhahaba','il est allé','ذ ه ب'],['الْوَلَدُ','al-waladu','le garçon','و ل د'],['إِلَى','ilā','vers, à',''],['الْمَدْرَسَةِ','al-madrasati','l’école','د ر س']]},
+ {ar:'الْبَيْتُ كَبِيرٌ',t:'al-baytu kabīrun',fr:'La maison est grande.',note:'Phrase nominale : pas de verbe « être » au présent.',words:[['الْبَيْتُ','al-baytu','la maison','ب ي ت'],['كَبِيرٌ','kabīrun','grand','ك ب ر']]}
+],
+// MODULE 6 — dialogues à branches (ok:true = réplique valide ; why = explication si erreur)
+dialogues: [
+ {id:'presentation',title:'Se présenter',npc:'Karim',nodes:{
+  start:{npc:{ar:'السَّلَامُ عَلَيْكُمْ',t:'as-salāmu ʿalaykum',fr:'Bonjour (« la paix soit sur vous »)'},choices:[
+   {ar:'وَعَلَيْكُمُ السَّلَامُ',t:'wa ʿalaykumu s-salām',fr:'Et sur vous la paix',ok:true,next:'name'},
+   {ar:'صَبَاحُ النُّورِ',t:'ṣabāḥu n-nūr',fr:'Bonjour (réponse à « bon matin »)',why:'صَبَاحُ النُّورِ répond à صَبَاحُ الْخَيْرِ, pas à السَّلَامُ عَلَيْكُمْ.'},
+   {ar:'مَعَ السَّلَامَةِ',t:'maʿa s-salāma',fr:'Au revoir',why:'C’est « au revoir » : vous venez de vous saluer.'}]},
+  name:{npc:{ar:'مَا اسْمُكَ؟',t:'mā-smuka?',fr:'Comment t’appelles-tu ?'},choices:[
+   {ar:'اِسْمِي إِيفَان',t:'ismī Ivan',fr:'Je m’appelle Ivan',ok:true,next:'hal'},
+   {ar:'أَنَا بِخَيْرٍ',t:'anā bi-khayr',fr:'Je vais bien',why:'On te demande ton nom, pas comment tu vas.'},
+   {ar:'أَنَا مِنْ فَرَنْسَا',t:'anā min faransā',fr:'Je viens de France',why:'Ça répond à « d’où viens-tu ? » (مِنْ أَيْنَ أَنْتَ؟).'}]},
+  hal:{npc:{ar:'تَشَرَّفْنَا. كَيْفَ حَالُكَ؟',t:'tasharrafnā. kayfa ḥāluka?',fr:'Enchanté. Comment vas-tu ?'},choices:[
+   {ar:'بِخَيْرٍ، وَالْحَمْدُ لِلَّهِ',t:'bi-khayr, wa-l-ḥamdu li-llāh',fr:'Bien, Dieu merci',ok:true,next:'from'},
+   {ar:'أَنَا مُتْعَبٌ قَلِيلًا',t:'anā mutʿabun qalīlan',fr:'Je suis un peu fatigué',ok:true,next:'tired'},
+   {ar:'اِسْمِي إِيفَان',t:'ismī Ivan',fr:'Je m’appelle Ivan',why:'Tu as déjà donné ton nom : on te demande comment tu vas.'}]},
+  tired:{npc:{ar:'سَلَامَتُكَ! مِنْ أَيْنَ أَنْتَ؟',t:'salāmatuk! min ayna anta?',fr:'Prends soin de toi ! D’où viens-tu ?'},choices:'from'},
+  from:{npc:{ar:'الْحَمْدُ لِلَّهِ. مِنْ أَيْنَ أَنْتَ؟',t:'al-ḥamdu li-llāh. min ayna anta?',fr:'Tant mieux. D’où viens-tu ?'},choices:[
+   {ar:'أَنَا مِنْ فَرَنْسَا',t:'anā min faransā',fr:'Je viens de France',ok:true,next:'end'},
+   {ar:'أَنَا بِخَيْرٍ',t:'anā bi-khayr',fr:'Je vais bien',why:'On te demande d’où tu viens.'},
+   {ar:'شُكْرًا',t:'shukran',fr:'Merci',why:'Ce n’est pas une réponse à « d’où ? ».'}]},
+  end:{npc:{ar:'أَهْلًا وَسَهْلًا فِي بَلَدِنَا!',t:'ahlan wa sahlan fī baladinā!',fr:'Bienvenue dans notre pays !'},end:true}}},
+ {id:'cafe',title:'Au café',npc:'Le serveur',nodes:{
+  start:{npc:{ar:'أَهْلًا! مَاذَا تُرِيدُ؟',t:'ahlan! mādhā turīd?',fr:'Bonjour ! Que veux-tu ?'},choices:[
+   {ar:'أُرِيدُ قَهْوَةً، مِنْ فَضْلِكَ',t:'urīdu qahwatan, min faḍlik',fr:'Je voudrais un café, s’il te plaît',ok:true,next:'sugar'},
+   {ar:'أُرِيدُ شَايًا، مِنْ فَضْلِكَ',t:'urīdu shāyan, min faḍlik',fr:'Je voudrais un thé, s’il te plaît',ok:true,next:'mint'},
+   {ar:'أَنَا مِنْ فَرَنْسَا',t:'anā min faransā',fr:'Je viens de France',why:'Le serveur te demande ce que tu veux boire.'}]},
+  sugar:{npc:{ar:'بِسُكَّرٍ أَمْ بِدُونِ سُكَّرٍ؟',t:'bi-sukkarin am bi-dūni sukkar?',fr:'Avec ou sans sucre ?'},choices:[
+   {ar:'بِدُونِ سُكَّرٍ',t:'bi-dūni sukkar',fr:'Sans sucre',ok:true,next:'serve'},
+   {ar:'بِسُكَّرٍ قَلِيلٍ',t:'bi-sukkarin qalīl',fr:'Avec un peu de sucre',ok:true,next:'serve'},
+   {ar:'مَا اسْمُكَ؟',t:'mā-smuka?',fr:'Comment t’appelles-tu ?',why:'Hors sujet : on te parle du sucre.'}]},
+  mint:{npc:{ar:'هَلْ تُرِيدُ نَعْنَاعًا؟',t:'hal turīdu naʿnāʿan?',fr:'Veux-tu de la menthe ?'},choices:[
+   {ar:'نَعَمْ، مِنْ فَضْلِكَ',t:'naʿam, min faḍlik',fr:'Oui, s’il te plaît',ok:true,next:'serve'},
+   {ar:'لَا، شُكْرًا',t:'lā, shukran',fr:'Non, merci',ok:true,next:'serve'},
+   {ar:'كَيْفَ حَالُكَ؟',t:'kayfa ḥāluka?',fr:'Comment vas-tu ?',why:'On te demande si tu veux de la menthe.'}]},
+  serve:{npc:{ar:'تَفَضَّلْ.',t:'tafaḍḍal.',fr:'Voilà, je t’en prie.'},choices:[
+   {ar:'شُكْرًا جَزِيلًا',t:'shukran jazīlan',fr:'Merci beaucoup',ok:true,next:'end'},
+   {ar:'وَعَلَيْكُمُ السَّلَامُ',t:'wa ʿalaykumu s-salām',fr:'Et sur vous la paix',why:'C’est la réponse à un salut, pas à « voilà ».'},
+   {ar:'أَيْنَ الْمَحَطَّةُ؟',t:'ayna l-maḥaṭṭa?',fr:'Où est la gare ?',why:'Hors sujet.'}]},
+  end:{npc:{ar:'عَفْوًا!',t:'ʿafwan!',fr:'De rien !'},end:true}}},
+ {id:'chemin',title:'Demander son chemin',npc:'Une passante',nodes:{
+  start:{npc:{ar:'هَلْ تَحْتَاجُ مُسَاعَدَةً؟',t:'hal taḥtāju musāʿadatan?',fr:'As-tu besoin d’aide ?'},choices:[
+   {ar:'نَعَمْ، أَيْنَ الْمَحَطَّةُ؟',t:'naʿam, ayna l-maḥaṭṭa?',fr:'Oui, où est la gare ?',ok:true,next:'dir'},
+   {ar:'أُرِيدُ قَهْوَةً',t:'urīdu qahwatan',fr:'Je voudrais un café',why:'Tu cherches ton chemin, pas un café.'},
+   {ar:'تَشَرَّفْنَا',t:'tasharrafnā',fr:'Enchanté',why:'Se dit après une présentation.'}]},
+  dir:{npc:{ar:'اِذْهَبْ مُسْتَقِيمًا، ثُمَّ إِلَى الْيَمِينِ.',t:'idhhab mustaqīman, thumma ilā l-yamīn.',fr:'Va tout droit, puis à droite.'},choices:[
+   {ar:'هَلْ هِيَ بَعِيدَةٌ؟',t:'hal hiya baʿīda?',fr:'Est-elle loin ?',ok:true,next:'far'},
+   {ar:'شُكْرًا، مَعَ السَّلَامَةِ',t:'shukran, maʿa s-salāma',fr:'Merci, au revoir',ok:true,next:'bye'},
+   {ar:'بِدُونِ سُكَّرٍ',t:'bi-dūni sukkar',fr:'Sans sucre',why:'Hors sujet.'}]},
+  far:{npc:{ar:'لَا، هِيَ قَرِيبَةٌ: خَمْسُ دَقَائِقَ.',t:'lā, hiya qarība: khamsu daqāʾiq.',fr:'Non, elle est proche : cinq minutes.'},choices:[
+   {ar:'شُكْرًا جَزِيلًا',t:'shukran jazīlan',fr:'Merci beaucoup',ok:true,next:'bye'},
+   {ar:'أَنَا بِخَيْرٍ',t:'anā bi-khayr',fr:'Je vais bien',why:'On ne t’a pas demandé comment tu vas.'},
+   {ar:'اُكْتُبْ',t:'uktub',fr:'Écris !',why:'Impératif du verbe « écrire » : hors sujet.'}]},
+  bye:{npc:{ar:'عَفْوًا، مَعَ السَّلَامَةِ!',t:'ʿafwan, maʿa s-salāma!',fr:'De rien, au revoir !'},end:true}}}
+]
+};
+
+const MODULES = [
+ {id:1,title:'Alphabet',sub:'28 lettres, leurs formes, les voyelles et les signes',lessons:[
+  {id:'1-1',title:'ا ب ت ث',kind:'letters',letters:'ابتث'},
+  {id:'1-2',title:'ج ح خ',kind:'letters',letters:'جحخ'},
+  {id:'1-3',title:'د ذ ر ز',kind:'letters',letters:'دذرز'},
+  {id:'1-4',title:'س ش ص ض',kind:'letters',letters:'سشصض'},
+  {id:'1-5',title:'ط ظ ع غ',kind:'letters',letters:'طظعغ'},
+  {id:'1-6',title:'ف ق ك ل',kind:'letters',letters:'فقكل'},
+  {id:'1-7',title:'م ن ه و ي',kind:'letters',letters:'منهوي'},
+  {id:'1-8',title:'Voyelles et signes',kind:'signs'}]},
+ {id:2,title:'Lecture',sub:'Des syllabes aux premiers mots vocalisés',lessons:[
+  {id:'2-1',title:'Syllabes : voyelles courtes',kind:'syll',long:false},
+  {id:'2-2',title:'Syllabes : voyelles longues',kind:'syll',long:true},
+  {id:'2-3',title:'Premiers mots, série 1',kind:'words',from:0,to:12},
+  {id:'2-4',title:'Premiers mots, série 2',kind:'words',from:12,to:24},
+  {id:'2-5',title:'Premiers mots, série 3',kind:'words',from:24,to:35},
+  {id:'2-6',title:'L’article ال',kind:'al'}]},
+ {id:3,title:'Vocabulaire et racines',sub:'Aperçu : 3 mots et une famille de racine',preview:true,lessons:[{id:'3-1',title:'Premiers mots et racine ك ت ب',kind:'vocab'}]},
+ {id:4,title:'Verbes',sub:'Aperçu : 3 verbes réguliers, toutes les personnes',preview:true,lessons:[{id:'4-1',title:'كَتَبَ، ذَهَبَ، جَلَسَ',kind:'verbs'}]},
+ {id:5,title:'Déchiffrer des phrases',sub:'Aperçu : 3 phrases mot à mot',preview:true,lessons:[{id:'5-1',title:'Premières phrases',kind:'sentences'}]},
+ {id:6,title:'Conversations',sub:'Aperçu : 3 dialogues en jeu de rôle, plus la conversation libre en ligne',preview:true,lessons:[{id:'6-1',title:'Dialogues de la vie courante',kind:'dialogues'}]}
+];
+
+/* =========================================================================
+   OUTILS
+   ========================================================================= */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const HARAKAT = /[\u064B-\u0652\u0670]/g;
+const strip = s => String(s).replace(HARAKAT,'');
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const sample = (a,n) => shuffle(a).slice(0,n);
+const uniq = a => [...new Set(a)];
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+const today = () => { const d=new Date(); return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/86400000); };
+const hasAr = s => /[\u0600-\u06FF]/.test(s);
+
+const LETTER = Object.fromEntries(DATA.letters.map(l=>[l.c,l]));
+const ALLC = DATA.letters.map(l=>l.c);
+DATA.words = DATA.words.map(([ar,t,fr,syl])=>({ar,t,fr,syl}));
+DATA.alWords.forEach(w=>w.al=true);
+const WORD_BY = Object.fromEntries(DATA.words.map(w=>[w.ar,w]));
+const AL_BY = Object.fromEntries(DATA.alWords.map(w=>[w.ar,w]));
+const VOCAB_BY = Object.fromEntries(DATA.vocab.map(w=>[w.ar,w]));
+const VERB_BY = Object.fromEntries(DATA.verbs.map(v=>[v.root.join(''),v]));
+const SIGN_BY = Object.fromEntries(DATA.signs.map(s=>[s.id,s]));
+const DLG = Object.fromEntries(DATA.dialogues.map(d=>[d.id,d]));
+const LESSONS = MODULES.flatMap((m,mi)=>m.lessons.map((l,li)=>Object.assign(l,{mi,li})));
+const lessonById = id => LESSONS.find(l=>l.id===id);
+
+const VOW = [{m:'َ',t:'a'},{m:'ِ',t:'i'},{m:'ُ',t:'u'}];
+const LVOW = [{m:'َا',t:'ā'},{m:'ِي',t:'ī'},{m:'ُو',t:'ū'}];
+const SYLL = [];
+DATA.letters.filter(l=>l.c!=='ا').forEach(l=>{
+  VOW.forEach((v,k)=>SYLL.push({ar:l.c+v.m,t:l.tc+v.t,c:l.c,long:false,v:k}));
+  LVOW.forEach((v,k)=>SYLL.push({ar:l.c+v.m,t:l.tc+v.t,c:l.c,long:true,v:k}));
+});
+const SYLL_BY = Object.fromEntries(SYLL.map(s=>[s.ar,s]));
+
+const PRON = [{ar:'أَنَا',fr:'je'},{ar:'أَنْتَ',fr:'tu (masc.)'},{ar:'أَنْتِ',fr:'tu (fém.)'},{ar:'هُوَ',fr:'il'},{ar:'هِيَ',fr:'elle'},{ar:'أَنْتُمَا',fr:'vous deux'},{ar:'هُمَا',fr:'eux deux (masc.)'},{ar:'هُمَا',fr:'elles deux (fém.)'},{ar:'نَحْنُ',fr:'nous'},{ar:'أَنْتُمْ',fr:'vous (masc.)'},{ar:'أَنْتُنَّ',fr:'vous (fém.)'},{ar:'هُمْ',fr:'ils'},{ar:'هُنَّ',fr:'elles'}];
+const PAST_SUF = ['ْتُ','ْتَ','ْتِ','َ','َتْ','ْتُمَا','َا','َتَا','ْنَا','ْتُمْ','ْتُنَّ','ُوا','ْنَ'];
+const PRES_PRE = ['أَ','تَ','تَ','يَ','تَ','تَ','يَ','تَ','نَ','تَ','تَ','يَ','يَ'];
+const PRES_END = ['ُ','ُ','ِينَ','ُ','ُ','َانِ','َانِ','َانِ','ُ','ُونَ','ْنَ','ُونَ','ْنَ'];
+const IMP_IDX = [1,2,5,9,10];
+const IMP_END = ['ْ','ِي','َا','ُوا','ْنَ'];
+function conj(v){
+  const [a,b,c] = v.root;
+  const past = PAST_SUF.map(s=>a+'َ'+b+'َ'+c+s);
+  const pres = PRES_PRE.map((p,i)=>p+a+'ْ'+b+v.v+c+PRES_END[i]);
+  const hz = v.v==='ُ' ? 'اُ' : 'اِ';
+  const imp = {}; IMP_IDX.forEach((pi,k)=>imp[pi]=hz+a+'ْ'+b+v.v+c+IMP_END[k]);
+  return {past,pres,imp};
+}
+
+/* =========================================================================
+   ÉTAT ET SAUVEGARDE
+   ========================================================================= */
+const KEY = 'alif-arabe-v1';
+const DEFAULT = {settings:{harakat:true,translit:true,size:44,rate:0.8,voice:'',theme:'auto',unlockAll:false,apiKey:'',model:'claude-sonnet-5-5'},lessons:{},items:{},streak:{n:0,last:-1},dialogues:{}};
+const clone = o => JSON.parse(JSON.stringify(o));
+function merge(o){ const d=clone(DEFAULT); return Object.assign(d,o,{settings:Object.assign(d.settings,o.settings||{}),streak:Object.assign(d.streak,o.streak||{}),lessons:o.lessons||{},items:o.items||{},dialogues:o.dialogues||{}}); }
+function load(){ try{ const raw=localStorage.getItem(KEY); if(raw) return merge(JSON.parse(raw)); }catch(e){} return clone(DEFAULT); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+let S = load();
+
+const fmt = (s,keep) => (keep||S.settings.harakat) ? s : strip(s);
+const ar = (s,cls='',keep=false) => `<span class="ar ${cls}" lang="ar">${esc(fmt(s,keep))}</span>`;
+const titleHtml = t => esc(t).replace(/([\u0600-\u06FF][\u0600-\u06FF\u064B-\u0652\s،]*)/g, m=>`<span class="ar" lang="ar">${m}</span>`);
+const isDone = id => !!(S.lessons[id] && S.lessons[id].done);
+
+/* ---- Répétition espacée (SM-2 simplifié) ---- */
+function seen(id){ if(!S.items[id]) S.items[id]={ef:2.5,int:0,reps:0,due:today()+1,ok:0,ko:0}; }
+function grade(id, correct){
+  seen(id); const it=S.items[id]; const q=correct?5:1;
+  if(correct){ it.ok++; it.reps++; it.int = it.reps===1?1 : it.reps===2?3 : Math.round(it.int*it.ef); }
+  else { it.ko++; it.reps=0; it.int=0; }
+  it.ef = Math.max(1.3, it.ef + 0.1 - (5-q)*(0.08+(5-q)*0.02));
+  it.due = today()+it.int; touchStreak(); save();
+}
+function touchStreak(){ const d=today(); if(S.streak.last===d) return; S.streak.n = (S.streak.last===d-1) ? S.streak.n+1 : 1; S.streak.last=d; save(); }
+const dueItems = () => Object.entries(S.items).filter(([,it])=>it.due<=today()).sort((a,b)=>a[1].due-b[1].due).map(([id])=>id);
+
+/* =========================================================================
+   AUDIO : synthèse vocale + enregistrement
+   ========================================================================= */
+const TTS = {voices:[],voice:null,ok:false,checked:false};
+function loadVoices(){
+  if(!('speechSynthesis' in window)){ TTS.ok=false; return; }
+  TTS.voices = speechSynthesis.getVoices().filter(v=>/^ar/i.test(v.lang));
+  TTS.voice = TTS.voices.find(v=>v.voiceURI===S.settings.voice) || TTS.voices.find(v=>/ar[-_]SA/i.test(v.lang)) || TTS.voices[0] || null;
+  TTS.ok = !!TTS.voice;
+}
+function speak(text, rate, pitch){
+  return new Promise(res=>{
+    if(!('speechSynthesis' in window) || !text) return res();
+    try{
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = TTS.voice ? TTS.voice.lang : 'ar-SA';
+      if(TTS.voice) u.voice = TTS.voice;
+      u.rate = rate || S.settings.rate; u.pitch = pitch || 1;
+      let done=false; const fin=()=>{ if(!done){ done=true; res(); } };
+      u.onend=fin; u.onerror=fin; setTimeout(fin, 1800 + text.length*260/u.rate);
+      speechSynthesis.speak(u);
+    }catch(e){ res(); }
+  });
+}
+let SEQ = 0;
+function playUrl(url){ return new Promise(res=>{ try{ const a=new Audio(url); a.onended=res; a.onerror=res; a.play().catch(res); }catch(e){ res(); } }); }
+const REC = {mr:null,box:null,timer:null};
+function recBlock(model){ return `<div class="rec" data-model="${esc(model)}"><button class="btn sm" data-act="rec">🎙 M’enregistrer</button><button class="btn sm" data-say="${esc(model)}">▶ Modèle</button><button class="btn sm" data-act="me" disabled>▶ Moi</button><button class="btn sm" data-act="ab" disabled>⇄ Comparer</button></div>`; }
+async function toggleRec(box){
+  if(REC.mr && REC.mr.state==='recording'){ REC.mr.stop(); return; }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder){ toast('Enregistrement indisponible dans ce navigateur. Essaie Chrome.'); return; }
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    const mr = new MediaRecorder(stream); const chunks=[];
+    mr.ondataavailable = e=>{ if(e.data && e.data.size) chunks.push(e.data); };
+    mr.onstop = ()=>{
+      stream.getTracks().forEach(t=>t.stop()); clearTimeout(REC.timer);
+      const blob = new Blob(chunks,{type:mr.mimeType||'audio/webm'});
+      if(box.dataset.me) URL.revokeObjectURL(box.dataset.me);
+      box.dataset.me = URL.createObjectURL(blob);
+      box.classList.remove('recording');
+      const b = box.querySelector('[data-act="rec"]'); if(b) b.textContent='🎙 Recommencer';
+      box.querySelectorAll('[data-act="me"],[data-act="ab"]').forEach(x=>x.disabled=false);
+      REC.mr=null;
+    };
+    REC.mr=mr; REC.box=box; mr.start(); box.classList.add('recording');
+    const b = box.querySelector('[data-act="rec"]'); if(b) b.textContent='⏹ Arrêter';
+    REC.timer = setTimeout(()=>{ if(mr.state==='recording') mr.stop(); }, 7000);
+  }catch(e){ toast('Micro refusé ou indisponible. Autorise le micro dans le navigateur.'); }
+}
+
+/* =========================================================================
+   RENDU DE SEGMENTS (surlignage sans casser la liaison des lettres)
+   ========================================================================= */
+const NONCONN = new Set([...'اأإآدذرزوؤءة']);
+const baseChars = s => strip(s).replace(/[\u200d\u0640]/g,'');
+function renderSegs(segs, keep){
+  const n = segs.length;
+  return segs.map((g,i)=>{
+    const s = fmt(g.s, keep);
+    const prevB = i>0 ? baseChars(segs[i-1].s).slice(-1) : '';
+    const lastB = baseChars(g.s).slice(-1);
+    const joinPrev = i>0 && prevB && !NONCONN.has(prevB);
+    const joinNext = i<n-1 && lastB && !NONCONN.has(lastB);
+    return `<span class="seg ${g.cls||''}" data-i="${i}">${joinPrev?'\u200d':''}${esc(s)}${joinNext?'\u200d':''}</span>`;
+  }).join('');
+}
+const clusters = s => s.match(/[^\u064B-\u0652\u0670][\u064B-\u0652\u0670]*/g) || [];
+function colorRoot(form, root){ let k=0; return renderSegs(clusters(form).map(cl=>{ if(k<3 && cl[0]===root[k]){ k++; return {s:cl,cls:'root'}; } return {s:cl}; }), true); }
+function forms(c){ const L=LETTER[c], T='ـ'; return {iso:c, ini:L.conn?c+T:c, med:L.conn?T+c+T:T+c, fin:T+c}; }
+const contains = (w,c) => c==='ا' ? /[اأإآ]/.test(strip(w)) : strip(w).includes(c);
+
+/* =========================================================================
+   GÉNÉRATEURS DE QUESTIONS
+   ========================================================================= */
+function letterPool(){ const ls = Object.keys(S.items).filter(k=>k.startsWith('L|')).map(k=>k.slice(2)); return ls.length>=6 ? ls : ALLC; }
+function letterOptions(L){
+  const conf = shuffle((DATA.conf[L.c]||[]).filter(c=>LETTER[c] && c!==L.c)).slice(0,2);
+  const others = uniq([...conf, ...shuffle(letterPool()), ...shuffle(ALLC)]).filter(c=>c!==L.c).slice(0,3);
+  return shuffle([L.c, ...others]);
+}
+function qLetter(L, kind){
+  kind = kind || pick(['listen','sound','form','word']);
+  const item = 'L|'+L.c, opts = letterOptions(L);
+  const explain = `${L.c} = ${L.n}, son « ${L.t} » : ${L.fr}.`;
+  if(kind==='listen') return {item, say:L.s, prompt:'Écoute et choisis la lettre.', options:opts.map(c=>({key:c,html:ar(c,'mid',true)})), answer:[L.c], explain};
+  if(kind==='sound') return {item, prompt:'Quel son fait cette lettre ?', show:ar(L.c,'big',true), options:opts.map(c=>({key:c,html:`<b>${esc(LETTER[c].t)}</b><span class="small muted">${esc(LETTER[c].n)}</span>`})), answer:[L.c], explain, sayAfter:L.s};
+  if(kind==='form'){
+    const f = pick(['ini','med','fin']); const lab = {ini:'en début de mot',med:'en milieu de mot',fin:'en fin de mot'}[f];
+    return {item, prompt:`Cette forme (${lab}) correspond à quelle lettre ?`, show:ar(forms(L.c)[f],'big',true), options:opts.map(c=>({key:c,html:ar(c,'mid',true)})), answer:[L.c], explain: explain + (L.conn?'':' Elle ne se lie jamais à la lettre suivante.'), sayAfter:L.s};
+  }
+  const others = shuffle(DATA.letters.filter(x=>x.c!==L.c).map(x=>x.ex)).filter(e=>!contains(e[0],L.c)).slice(0,3);
+  return {item, prompt:`Quel mot contient la lettre ${ar(L.c,'sm',true)} ?`, options:shuffle([L.ex,...others]).map(e=>({key:e[0],html:ar(e[0],'mid')+`<span class="tr small">${esc(e[1])}</span>`})), answer:[L.ex[0]], explain:`${L.ex[0]} (${L.ex[1]}) = ${L.ex[2]}.`, sayAfter:L.ex[0]};
+}
+function qSign(G, kind){
+  kind = kind || pick(['name','listen']);
+  const opts = shuffle([G, ...sample(DATA.signs.filter(s=>s.id!==G.id),3)]);
+  const item = 'G|'+G.id;
+  if(kind==='name') return {item, prompt:'Quel est ce signe ?', show:ar(G.demo,'big',true), options:opts.map(s=>({key:s.id,html:esc(s.name)})), answer:[G.id], explain:G.d, sayAfter:G.ex[0]};
+  return {item, say:G.ex[0], prompt:'Écoute : quel mot entends-tu ?', options:opts.map(s=>({key:s.id,html:ar(s.ex[0],'mid',true)})), answer:[G.id], explain:`${G.ex[0]} (${G.ex[1]}) = ${G.ex[2]}. ${G.d}`};
+}
+function syllOptions(sy){
+  const same = SYLL.filter(x=>x.c===sy.c && x!==sy && (sy.long || !x.long));
+  const confC = (DATA.conf[sy.c]||[]).filter(c=>c!=='ا' && LETTER[c]);
+  const conf = SYLL.filter(x=>confC.includes(x.c) && x.v===sy.v && x.long===sy.long);
+  const pool = [...shuffle(same).slice(0,2), ...shuffle(conf).slice(0,1), ...shuffle(same), ...shuffle(SYLL.filter(x=>x.long===sy.long))];
+  const out=[], seenT=new Set([sy.t]);
+  for(const x of pool){ if(!seenT.has(x.t)){ out.push(x); seenT.add(x.t); } if(out.length===3) break; }
+  return shuffle([sy,...out]);
+}
+function qSyll(sy, kind){
+  kind = kind || pick(['listen','see']); const opts = syllOptions(sy); const item='S|'+sy.ar;
+  const explain = `${sy.ar} se lit « ${sy.t} ».`;
+  if(kind==='listen') return {item, say:sy.ar, prompt:'Écoute et choisis la syllabe.', options:opts.map(x=>({key:x.ar,html:ar(x.ar,'mid',true)})), answer:[sy.ar], explain};
+  return {item, prompt:'Comment se lit cette syllabe ?', show:ar(sy.ar,'big',true), options:opts.map(x=>({key:x.ar,html:`<b>${esc(x.t)}</b>`})), answer:[sy.ar], explain, sayAfter:sy.ar};
+}
+function qWord(w, pool, kind, prefix){
+  kind = kind || pick(['listen','tr','fr']);
+  const item = (prefix || (w.al?'A|':'W|')) + w.ar;
+  const explain = `${w.ar} : ${w.t}, « ${w.fr} ».`;
+  if(kind==='sun') return {item, prompt:'Le ل de l’article se prononce-t-il ?', show:ar(w.ar,'big'), options:[{key:'1',html:'Non : lettre solaire'},{key:'0',html:'Oui : lettre lunaire'}], answer:[String(w.sun)], explain:`${w.t} : ${w.sun?'lettre solaire, le ل est muet et la lettre suivante doublée.':'lettre lunaire, le ل se prononce.'}`, sayAfter:w.ar};
+  const cands = []; const seenAr = new Set([w.ar]), seenFr = new Set([w.fr]);
+  for(const x of shuffle(pool)){ if(!seenAr.has(x.ar) && !seenFr.has(x.fr)){ cands.push(x); seenAr.add(x.ar); seenFr.add(x.fr); } if(cands.length===3) break; }
+  const opts = shuffle([w, ...cands]);
+  if(kind==='listen') return {item, say:w.ar, prompt:'Écoute et choisis le mot.', options:opts.map(x=>({key:x.ar,html:ar(x.ar,'mid')})), answer:[w.ar], explain};
+  if(kind==='tr') return {item, prompt:'Comment se lit ce mot ?', show:ar(w.ar,'big'), options:opts.map(x=>({key:x.ar,html:`<b>${esc(x.t)}</b>`})), answer:[w.ar], explain, sayAfter:w.ar};
+  return {item, prompt:'Que signifie ce mot ?', show:ar(w.ar,'big'), options:opts.map(x=>({key:x.ar,html:esc(x.fr)})), answer:[w.ar], explain, sayAfter:w.ar};
+}
+function qRoot(){
+  const R = DATA.roots[0]; const f = pick(R.family);
+  const opts = shuffle(uniq([R.root,'ر ح ب','ش ك ر','د ر س']).slice(0,4));
+  return {item:null, prompt:`Quelle est la racine de ${ar(f[0],'sm')} (${esc(f[2])}) ?`, options:opts.map(r=>({key:r,html:ar(r,'mid',true)})), answer:[R.root], explain:`${f[0]} vient de ${R.root} : ${R.sense}.`, sayAfter:f[0]};
+}
+function qVerb(v, kind){
+  const C = conj(v); kind = kind || pick(['conj','pron','root']);
+  const tense = pick(['past','pres']); const TL={past:'passé',pres:'présent'};
+  const fs = C[tense]; const i = Math.floor(Math.random()*13); const f = fs[i];
+  const item = 'C|'+v.root.join('');
+  if(kind==='conj'){
+    const o = sample(uniq(fs.filter(x=>x!==f)),3);
+    return {item, prompt:`Conjugue « ${esc(v.fr)} » au ${TL[tense]} avec ${ar(PRON[i].ar,'sm',true)} (${esc(PRON[i].fr)}).`, options:shuffle([f,...o]).map(x=>({key:x,html:ar(x,'mid',true)})), answer:[f], explain:`${PRON[i].ar} ${f}`, sayAfter:PRON[i].ar+' '+f};
+  }
+  if(kind==='pron'){
+    const same = PRON.map((p,k)=>k).filter(k=>fs[k]===f);
+    const diff = sample(PRON.map((p,k)=>k).filter(k=>fs[k]!==f),3);
+    return {item, prompt:`Quel pronom va avec cette forme (${TL[tense]}) ?`, show:ar(f,'big',true), say:f, options:shuffle([i,...diff]).map(k=>({key:String(k),html:ar(PRON[k].ar,'mid',true)+`<span class="small muted">${esc(PRON[k].fr)}</span>`})), answer:same.map(String), explain: same.length>1 ? `Même forme pour : ${same.map(k=>PRON[k].fr).join(', ')}. Le contexte tranche.` : `${PRON[i].fr} → ${f}`};
+  }
+  const r = v.root.join(' ');
+  const opts = shuffle(uniq([r, ...DATA.verbs.map(x=>x.root.join(' ')), 'ك ب ر','د ر س']).slice(0,4));
+  return {item, prompt:'Quelle est la racine de cette forme ?', show:`<span class="ar big">${colorRoot(f,v.root).replace(/class="seg root"/g,'class="seg"')}</span>`, options:opts.map(x=>({key:x,html:ar(x,'mid',true)})), answer:[r], explain:`Racine ${r} : ${v.fr}. Ce qui entoure la racine indique la personne.`, sayAfter:f};
+}
+function qSent(idx, kind){
+  const P = DATA.sentences[idx]; kind = kind || pick(['fr','listen','order']); const item='P|'+idx;
+  const explain = `${P.t} : « ${P.fr} »`;
+  if(kind==='order') return {kind:'order', item, say:P.ar, prompt:'Écoute, puis remets les mots dans l’ordre (de droite à gauche).', words:shuffle(P.words.map(w=>w[0])), correct:P.words.map(w=>w[0]).join(' '), explain};
+  const opts = DATA.sentences.map((p,k)=>k);
+  if(kind==='listen') return {item, say:P.ar, prompt:'Dictée : quelle phrase entends-tu ?', options:shuffle(opts).map(k=>({key:String(k),html:ar(DATA.sentences[k].ar,'sm')})), answer:[String(idx)], explain};
+  return {item, prompt:'Que signifie cette phrase ?', show:ar(P.ar,'mid'), options:shuffle(opts).map(k=>({key:String(k),html:esc(DATA.sentences[k].fr)})), answer:[String(idx)], explain, sayAfter:P.ar};
+}
+function qForItem(id){
+  const p = id.indexOf('|'); const t = id.slice(0,p), k = id.slice(p+1);
+  try{
+    if(t==='L' && LETTER[k]) return qLetter(LETTER[k]);
+    if(t==='G' && SIGN_BY[k]) return qSign(SIGN_BY[k]);
+    if(t==='S' && SYLL_BY[k]) return qSyll(SYLL_BY[k]);
+    if(t==='W' && WORD_BY[k]) return qWord(WORD_BY[k], DATA.words);
+    if(t==='A' && AL_BY[k]) return qWord(AL_BY[k], DATA.alWords, pick(['sun','listen','fr']));
+    if(t==='V' && VOCAB_BY[k]) return qWord(VOCAB_BY[k], [...DATA.vocab,...DATA.words], pick(['listen','fr']), 'V|');
+    if(t==='C' && VERB_BY[k]) return qVerb(VERB_BY[k]);
+    if(t==='P' && DATA.sentences[+k]) return qSent(+k);
+  }catch(e){}
+  return null;
+}
+function buildQuiz(L){
+  const qs=[];
+  if(L.kind==='letters'){ const ls=[...L.letters].map(c=>LETTER[c]); const K=['listen','sound','form','word']; for(let i=0;i<10;i++) qs.push(qLetter(ls[i%ls.length], K[(i+Math.floor(i/ls.length))%4])); }
+  else if(L.kind==='signs'){ const ss=shuffle(DATA.signs); for(let i=0;i<10;i++) qs.push(qSign(ss[i%ss.length], i%2?'name':'listen')); }
+  else if(L.kind==='syll'){ sample(SYLL.filter(s=>s.long===L.long),10).forEach((s,i)=>qs.push(qSyll(s, i%2?'see':'listen'))); }
+  else if(L.kind==='words'){ const ws=DATA.words.slice(L.from,L.to); const K=['listen','tr','fr']; shuffle(ws).slice(0,10).forEach((w,i)=>qs.push(qWord(w,DATA.words,K[i%3]))); }
+  else if(L.kind==='al'){ const K=['sun','listen','fr']; shuffle(DATA.alWords).forEach((w,i)=>qs.push(qWord(w,DATA.alWords,K[i%3]))); }
+  else if(L.kind==='vocab'){ DATA.vocab.forEach(v=>{ qs.push(qWord(v,[...DATA.vocab,...DATA.words],'fr','V|')); qs.push(qWord(v,[...DATA.vocab,...DATA.words],'listen','V|')); }); qs.push(qRoot()); qs.push(qRoot()); }
+  else if(L.kind==='verbs'){ const K=['conj','pron','root']; for(let i=0;i<10;i++) qs.push(qVerb(DATA.verbs[i%3], K[i%3])); }
+  else if(L.kind==='sentences'){ DATA.sentences.forEach((p,i)=>{ qs.push(qSent(i,'order')); qs.push(qSent(i,'fr')); qs.push(qSent(i,'listen')); }); }
+  return shuffle(qs.filter(Boolean));
+}
+
+/* =========================================================================
+   NAVIGATION ET RENDU
+   ========================================================================= */
+let VIEW = {name:'home',params:{}}; const HIST = []; let AFTER = null;
+function go(name, params={}, push=true){ if(push) HIST.push(VIEW); VIEW={name,params}; window.scrollTo(0,0); render(); }
+function tab(name){ HIST.length=0; VIEW={name,params:{}}; window.scrollTo(0,0); render(); }
+function back(){ const v=HIST.pop(); if(v){ VIEW=v; render(); } }
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove('on'),2600); }
+function applySettings(){
+  document.documentElement.style.setProperty('--ar-size', S.settings.size+'px');
+  document.body.classList.toggle('no-tr', !S.settings.translit);
+  if(S.settings.theme==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', S.settings.theme);
+}
+function moduleUnlocked(mi){ if(S.settings.unlockAll || mi===0) return true; const M=MODULES[mi]; const prev = M.preview ? MODULES[1] : MODULES[mi-1]; return prev.lessons.every(l=>isDone(l.id)); }
+function lessonUnlocked(mi,li){ if(S.settings.unlockAll) return true; if(!moduleUnlocked(mi)) return false; const M=MODULES[mi]; return M.preview || li===0 || isDone(M.lessons[li-1].id); }
+
+const VIEWS = {};
+function render(){
+  AFTER = null;
+  const fn = VIEWS[VIEW.name] || VIEWS.home;
+  $('#app').innerHTML = fn(VIEW.params||{});
+  $('#backBtn').hidden = !HIST.length;
+  $('#streak').textContent = S.streak.n && S.streak.last>=today()-1 ? `🔥 ${S.streak.n} jour${S.streak.n>1?'s':''}` : '';
+  const tabName = ['home','review','stats','settings'].includes(VIEW.name) ? VIEW.name : 'home';
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on', b.dataset.arg===tabName));
+  if(AFTER) AFTER();
+}
+
+function voiceBanner(){
+  return `<div class="card banner"><b>Aucune voix arabe détectée sur cet appareil.</b><p class="small">Sans voix arabe, l’app fonctionne mais reste muette. Installe-la une fois (gratuit, puis disponible hors connexion), puis recharge la page.</p>${voiceHelp()}</div>`;
+}
+function voiceHelp(){
+  return `<details><summary>Comment installer une voix arabe</summary><ul class="small">
+  <li><b>Android</b> : Paramètres › Système › Langues › Synthèse vocale › moteur Google › Installer les données vocales › Arabe.</li>
+  <li><b>iPhone / iPad</b> : Réglages › Accessibilité › Contenu énoncé › Voix › Arabe › télécharger une voix.</li>
+  <li><b>Windows</b> : Paramètres › Heure et langue › Langue et région › Ajouter une langue › Arabe (Arabie saoudite), avec l’option synthèse vocale.</li>
+  <li><b>macOS</b> : Réglages Système › Accessibilité › Contenu énoncé › Voix du système › Gérer les voix › Arabe.</li></ul>
+  <p class="small muted">Les menus varient selon la version du système.</p></details>`;
+}
+
+/* ---------- Accueil ---------- */
+VIEWS.home = () => {
+  const due = dueItems().length; let h='';
+  if(TTS.checked && !TTS.ok) h += voiceBanner();
+  h += `<section class="card hero"><div class="ar" lang="ar">أ ب ت</div><div><h1>Arabe littéraire</h1><p>Lettres, lecture, vocabulaire, verbes, phrases, puis conversation. Un module se débloque quand le précédent est validé à 80 %.</p></div></section>`;
+  h += `<div class="card review-card"><div><b>Révision du jour</b><div class="small muted">${due?`${due} élément${due>1?'s':''} à revoir`:'Rien à revoir pour l’instant'}</div></div><button class="btn primary" data-act="review" ${due?'':'disabled'}>Réviser</button></div>`;
+  MODULES.forEach((M,mi)=>{
+    const un = moduleUnlocked(mi), done = M.lessons.filter(l=>isDone(l.id)).length;
+    h += `<section class="card module ${un?'':'is-locked'}"><div class="mhead"><span class="mnum">${M.id}</span><div><h2>${esc(M.title)}</h2><div class="small muted">${esc(M.sub)}${un?'':' · se débloque après le module '+(M.preview?2:mi)}</div></div><span class="mprog">${done}/${M.lessons.length}</span></div>`;
+    M.lessons.forEach((L,li)=>{
+      const lu = lessonUnlocked(mi,li), r = S.lessons[L.id];
+      h += `<button class="lesson ${r&&r.done?'done':''}" data-act="lesson" data-arg="${L.id}" ${lu?'':'disabled'}><span class="lst">${r&&r.done?'✓':lu?'›':'🔒'}</span><span class="ltitle">${titleHtml(L.title)}</span>${r&&r.best!=null?`<span class="lscore">${r.best} %</span>`:''}</button>`;
+    });
+    h += `</section>`;
+  });
+  return h;
+};
+
+/* ---------- Leçons ---------- */
+const quizBtn = L => `<button class="btn primary block" data-act="quiz" data-arg="${L.id}">Lancer le quiz (80 % pour valider)</button>`;
+VIEWS.lesson = p => {
+  const L = lessonById(p.id); if(!L) return '';
+  const head = `<h1>${titleHtml(L.title)}</h1>`;
+  const fn = {letters:lessonLetters,signs:lessonSigns,syll:lessonSyll,words:lessonWords,al:lessonAl,vocab:lessonVocab,verbs:lessonVerbs,sentences:lessonSentences,dialogues:lessonDialogues}[L.kind];
+  return head + fn(L, p);
+};
+function lessonLetters(L){
+  const ls=[...L.letters].map(c=>LETTER[c]); ls.forEach(l=>seen('L|'+l.c)); save();
+  let h = `<p class="muted">Touche la grande lettre pour l’entendre. Observe ses 4 formes, enregistre-toi, puis trace-la.</p>`;
+  ls.forEach(l=>{ const f=forms(l.c);
+    h += `<article class="card letter"><div class="lhead"><button class="glyph" lang="ar" data-say="${esc(l.s)}" aria-label="Écouter ${esc(l.n)}">${esc(l.c)}</button><div><h3>${esc(l.n)} ${ar(l.na,'sm',true)}</h3><div>Son <b>${esc(l.t)}</b> : ${esc(l.fr)}</div></div></div>
+    <div class="row"><button class="btn sm" data-say="${esc(l.na)}">🔊 Nom</button><button class="btn sm" data-say="${esc(l.s)}">🔊 Son</button><button class="btn sm" data-say="${esc(l.s)}" data-rate="0.5">🐢 Lent</button><button class="btn sm" data-act="trace" data-arg="${l.c}">✍ Tracer</button></div>
+    <div class="forms">${[['iso','Isolée'],['ini','Début'],['med','Milieu'],['fin','Fin']].map(([k,lab])=>`<div><div class="ar">${esc(f[k])}</div><div class="small muted">${lab}</div></div>`).join('')}</div>
+    <p class="small">${l.conn?'Se lie aux lettres de part et d’autre.':'Ne se lie jamais à la lettre suivante : le mot se coupe après elle.'}</p>
+    <p class="tip small">💡 ${esc(l.mn)}</p>${l.trap?`<p class="warn small">⚠ ${esc(l.trap)}</p>`:''}
+    <div class="example">${ar(l.ex[0])}<span><span class="tr">${esc(l.ex[1])}</span> · ${esc(l.ex[2])}</span><button class="btn sm" data-say="${esc(l.ex[0])}">🔊</button></div>
+    ${recBlock(l.s)}</article>`;
+  });
+  return h + quizBtn(L);
+}
+function lessonSigns(L){
+  DATA.signs.forEach(s=>seen('G|'+s.id)); save();
+  let h = `<p class="muted">L’arabe n’écrit que les consonnes et les voyelles longues. Les voyelles courtes sont de petits signes (harakat), présents dans les manuels puis absents dans la presse.</p>`;
+  DATA.signs.forEach(s=>{ h += `<article class="card"><div class="row between"><h3>${esc(s.name)}</h3>${ar(s.demo,'mid',true)}</div><p>${esc(s.d)}</p><div class="example">${ar(s.ex[0],'',true)}<span><span class="tr">${esc(s.ex[1])}</span> · ${esc(s.ex[2])}</span><button class="btn sm" data-say="${esc(s.ex[0])}">🔊</button></div></article>`; });
+  return h + quizBtn(L);
+}
+function lessonSyll(L){
+  const cons = DATA.letters.filter(l=>l.c!=='ا');
+  const PAIRS = [['ح','ه'],['ع','أ'],['ق','ك'],['ص','س'],['ط','ت'],['ض','د'],['ظ','ذ'],['خ','غ']];
+  const m = L.long ? 'َا' : 'َ';
+  let h = `<p class="muted">${L.long?'Une voyelle longue dure deux fois plus longtemps. Compare chaque paire courte / longue.':'Consonne + voyelle courte. Touche une syllabe pour l’entendre.'}</p>`;
+  h += `<div class="card"><h3>Paires pièges pour un francophone</h3><div class="pairs">${PAIRS.map(([a,b])=>`<div class="pair"><button data-say="${esc(a+m)}">${esc(a+m)}</button><button data-say="${esc(b+m)}">${esc(b+m)}</button></div>`).join('')}</div></div>`;
+  const cols = L.long ? [['َ','a'],['َا','ā'],['ِ','i'],['ِي','ī'],['ُ','u'],['ُو','ū']] : [['َ','a'],['ِ','i'],['ُ','u']];
+  h += `<div class="card overflow"><table class="syl"><tr><th></th>${cols.map(c=>`<th>${c[1]}</th>`).join('')}</tr>${cons.map(l=>`<tr><td>${esc(l.c)}</td>${cols.map(c=>`<td><button class="sylb" data-say="${esc(l.c+c[0])}">${esc(l.c+c[0])}</button></td>`).join('')}</tr>`).join('')}</table></div>`;
+  return h + quizBtn(L);
+}
+let READER = null;
+function readerCard(segs, whole, w, extra=''){
+  READER = {segs, whole};
+  return `<div class="card"><div class="reader-word big ar" lang="ar" id="rw">${renderSegs(segs)}</div><p class="center"><span class="tr">${esc(w.t)}</span> · <b>${esc(w.fr)}</b></p>${extra}
+  <div class="row center"><button class="btn primary" data-act="readseq">▶ Syllabe par syllabe</button><button class="btn" data-say="${esc(whole)}">🔊 Mot entier</button><button class="btn" data-say="${esc(whole)}" data-rate="0.5">🐢</button></div>${recBlock(whole)}</div>`;
+}
+function lessonWords(L, p){
+  const ws = DATA.words.slice(L.from,L.to); ws.forEach(w=>seen('W|'+w.ar)); save();
+  const sel = Math.min(p.sel||0, ws.length-1); const w = ws[sel];
+  let h = `<p class="muted">Lis d’abord syllabe par syllabe, puis le mot entier. Choisis un mot dans la liste.</p>`;
+  h += readerCard(w.syl.map(s=>({s})), w.ar, w);
+  h += `<div class="wordgrid">${ws.map((x,i)=>`<button class="wchip ${i===sel?'on':''}" data-act="wsel" data-arg="${i}">${ar(x.ar)}<span class="small muted">${esc(x.fr)}</span></button>`).join('')}</div>`;
+  return h + quizBtn(L);
+}
+function lessonAl(L, p){
+  DATA.alWords.forEach(w=>seen('A|'+w.ar)); save();
+  const sel = Math.min(p.sel||0, DATA.alWords.length-1); const w = DATA.alWords[sel];
+  const lam = w.ar.startsWith('الْ') ? 'لْ' : 'ل'; const rest = w.ar.slice(1+lam.length);
+  let h = `<div class="card"><p>ال (al-) = « le, la, les ». Devant une <b>lettre solaire</b>, le ل est muet et la lettre suivante est doublée (shadda). Devant une <b>lettre lunaire</b>, on dit « al- ».</p><p class="small">Solaires : ${ar(DATA.sunLetters,'sm',true)}</p><p class="small">Lunaires : ${ar(DATA.moonLetters,'sm',true)}</p></div>`;
+  h += readerCard([{s:'ا'},{s:lam,cls:w.sun?'mute':''},{s:rest}], w.ar, w, `<p class="center small">${w.sun?'Lettre solaire : le ل est muet.':'Lettre lunaire : le ل se prononce.'}</p>`);
+  READER.wholeOnly = true;
+  h += `<div class="wordgrid">${DATA.alWords.map((x,i)=>`<button class="wchip ${i===sel?'on':''}" data-act="wsel" data-arg="${i}">${ar(x.ar)}<span class="small muted">${x.sun?'solaire':'lunaire'}</span></button>`).join('')}</div>`;
+  return h + quizBtn(L);
+}
+function lessonVocab(L){
+  DATA.vocab.forEach(v=>seen('V|'+v.ar)); save();
+  let h = `<p class="muted">Aperçu du module 3. Chaque mot arabe se construit sur une racine de 3 consonnes qui porte le sens.</p>`;
+  DATA.vocab.forEach(v=>{ h += `<article class="card"><div class="row between">${ar(v.ar,'mid')}<button class="btn sm" data-say="${esc(v.ar)}">🔊</button></div><p><span class="tr">${esc(v.t)}</span> · <b>${esc(v.fr)}</b> <span class="small muted">· ${esc(v.theme)} · racine ${ar(v.root,'',true)}</span></p><div class="example">${ar(v.ex.ar)}<span><span class="tr">${esc(v.ex.t)}</span> · ${esc(v.ex.fr)}</span><button class="btn sm" data-say="${esc(v.ex.ar)}">🔊</button></div>${recBlock(v.ar)}</article>`; });
+  DATA.roots.forEach(R=>{ h += `<article class="card"><h3>Famille de la racine ${ar(R.root,'mid',true)}</h3><p class="muted small">${esc(R.sense)}</p>${R.family.map(f=>`<div class="weak"><span>${ar(f[0])} <span class="tr small">${esc(f[1])}</span></span><span class="small">${esc(f[2])}</span><button class="btn sm" data-say="${esc(f[0])}">🔊</button></div>`).join('')}</article>`; });
+  return h + quizBtn(L);
+}
+function lessonVerbs(L, p){
+  DATA.verbs.forEach(v=>seen('C|'+v.root.join(''))); save();
+  const vi = p.v||0, tense = p.t||'past', v = DATA.verbs[vi], C = conj(v);
+  let h = `<div class="card"><p>Un verbe = une <b>racine</b> de 3 consonnes (en couleur) + des ajouts qui indiquent la personne. Au passé, la personne est un suffixe ; au présent, un préfixe (parfois avec suffixe).</p><p class="small muted">Le duel (« vous deux », « eux deux ») est propre à l’arabe littéraire.</p></div>`;
+  h += `<div class="row">${DATA.verbs.map((x,i)=>`<button class="btn sm ${i===vi?'on':''}" data-act="verb" data-arg="${i}"><span class="ar">${esc(fmt(x.past))}</span>&nbsp;${esc(x.fr)}</button>`).join('')}</div>`;
+  h += `<div class="row">${[['past','Passé'],['pres','Présent'],['imp','Impératif']].map(([k,lab])=>`<button class="btn sm ${k===tense?'on':''}" data-act="tense" data-arg="${k}">${lab}</button>`).join('')}</div>`;
+  const idx = tense==='imp' ? IMP_IDX : PRON.map((x,i)=>i);
+  h += `<div class="card overflow"><p class="small muted">${esc(v.t)} · ${esc(v.fr)}</p><table class="conj">${idx.map(i=>{ const f = tense==='imp' ? C.imp[i] : C[tense][i]; const say = tense==='imp' ? f : PRON[i].ar+' '+f; return `<tr><td class="ar" lang="ar">${esc(fmt(PRON[i].ar))}</td><td class="small muted">${esc(PRON[i].fr)}</td><td class="ar form" lang="ar">${colorRoot(f,v.root)}</td><td><button class="btn sm" data-say="${esc(say)}">🔊</button></td></tr>`; }).join('')}</table></div>`;
+  return h + quizBtn(L);
+}
+function lessonSentences(L, p){
+  DATA.sentences.forEach((s,i)=>seen('P|'+i)); save();
+  const open = p.open || {}; const bare = p.bare || {};
+  let h = `<p class="muted">Touche un mot pour voir son sens et sa racine. Essaie ensuite de lire la phrase sans voyelles.</p>`;
+  DATA.sentences.forEach((P,si)=>{
+    const keep = !bare[si] && S.settings.harakat;
+    const wj = open[si];
+    h += `<article class="card"><div class="sentence">${P.words.map((w,wi)=>`<button class="wbtn ${wj===wi?'on':''}" lang="ar" data-act="sword" data-arg="${si}:${wi}">${esc(keep?w[0]:strip(w[0]))}</button>`).join('')}</div>`;
+    if(wj!=null){ const w=P.words[wj]; h += `<div class="winfo"><div class="row between">${ar(w[0],'sm',true)}<button class="btn sm" data-say="${esc(w[0])}">🔊</button></div><div><span class="tr">${esc(w[1])}</span> · <b>${esc(w[2])}</b>${w[3]?` · racine ${ar(w[3],'',true)}`:''}</div></div>`; }
+    h += `<div class="row"><button class="btn sm" data-say="${esc(P.ar)}">▶ Phrase</button><button class="btn sm" data-say="${esc(P.ar)}" data-rate="0.55">🐢 Lent</button><button class="btn sm" data-act="sbare" data-arg="${si}">${bare[si]?'Avec voyelles':'Sans voyelles'}</button></div>
+    <details><summary>Traduction</summary><p><span class="tr">${esc(P.t)}</span></p><p><b>${esc(P.fr)}</b></p><p class="small muted">${esc(P.note)}</p></details>${recBlock(P.ar)}</article>`;
+  });
+  return h + quizBtn(L);
+}
+function lessonDialogues(){
+  let h = `<p class="muted">Écoute d’abord le dialogue, puis joue ton rôle : choisis la bonne réplique, dis-la à voix haute et compare avec le modèle. Les répliques sont au masculin.</p>`;
+  DATA.dialogues.forEach(d=>{ h += `<article class="card"><div class="row between"><h3>${esc(d.title)} ${S.dialogues[d.id]?'<span class="small" style="color:var(--ok)">✓ terminé</span>':''}</h3></div><div class="row"><button class="btn sm" data-act="dlg" data-arg="${d.id}:listen">🎧 Écouter</button><button class="btn sm primary" data-act="dlg" data-arg="${d.id}:play">🎭 Jeu de rôle</button></div></article>`; });
+  h += `<article class="card"><h3>Conversation libre</h3><p class="small muted">Nécessite une connexion et une clé API (Réglages). Un tuteur IA te répond en arabe littéraire vocalisé et corrige tes phrases.</p><button class="btn" data-act="go" data-arg="chat">Ouvrir la conversation libre</button></article>`;
+  return h;
+}
+
+/* ---------- Quiz ---------- */
+let Q = null;
+function startQuiz(qs, meta){ Q = {qs:qs.filter(Boolean), i:0, score:0, answered:false, picked:null, graded:new Set(), meta, ord:[], saidFor:-1}; if(!Q.qs.length){ toast('Aucune question disponible.'); return; } go('quiz'); }
+VIEWS.quiz = () => {
+  if(!Q) return '<p>Aucun quiz en cours.</p>';
+  if(Q.i >= Q.qs.length) return quizEnd();
+  const q = Q.qs[Q.i];
+  let h = `<div class="progress"><i style="width:${Q.i/Q.qs.length*100}%"></i></div><p class="small muted">Question ${Q.i+1} sur ${Q.qs.length}</p><div class="card"><div class="qprompt">${q.prompt}</div>`;
+  if(q.say) h += `<div class="row center"><button class="btn" data-say="${esc(q.say)}">🔊 Réécouter</button><button class="btn ghost" data-say="${esc(q.say)}" data-rate="0.55">🐢 Lent</button></div>`;
+  if(q.show) h += `<div class="show">${q.show}</div>`;
+  if(q.kind==='order'){
+    const picked = Q.ord;
+    h += `<div class="orderzone">${picked.length?picked.map((wi,k)=>`<button class="wbtn on" lang="ar" data-act="ordundo" data-arg="${k}" ${Q.answered?'disabled':''}>${esc(fmt(q.words[wi]))}</button>`).join(''):'<span class="small muted" dir="ltr">Touche les mots ci-dessous</span>'}</div>`;
+    h += `<div class="sentence">${q.words.map((w,wi)=>picked.includes(wi)?'':`<button class="wbtn" lang="ar" data-act="ordpick" data-arg="${wi}" ${Q.answered?'disabled':''}>${esc(fmt(w))}</button>`).join('')}</div>`;
+    if(!Q.answered) h += `<button class="btn primary block" data-act="ordcheck" ${picked.length===q.words.length?'':'disabled'}>Vérifier</button>`;
+  } else {
+    h += `<div class="opts">${q.options.map(o=>{ let cls=''; if(Q.answered){ if(q.answer.includes(o.key)) cls='ok'; else if(o.key===Q.picked) cls='ko'; } return `<button class="opt ${cls}" data-act="ans" data-arg="${esc(o.key)}" ${Q.answered?'disabled':''}>${o.html}</button>`; }).join('')}</div>`;
+  }
+  if(Q.answered){
+    h += `<div class="fb ${Q.lastOk?'ok':'ko'}"><b>${Q.lastOk?'Bonne réponse.':'Pas tout à fait.'}</b>${q.kind==='order'&&!Q.lastOk?`<div>${ar(q.correct,'sm')}</div>`:''}<span>${esc(q.explain||'')}</span></div><button class="btn primary block" data-act="next">${Q.i+1<Q.qs.length?'Question suivante':'Voir le résultat'}</button>`;
+  }
+  h += `</div>`;
+  if(q.say && Q.saidFor!==Q.i){ Q.saidFor=Q.i; AFTER = ()=>setTimeout(()=>speak(q.say),250); }
+  return h;
+};
+function answer(key){
+  const q = Q.qs[Q.i]; if(Q.answered) return;
+  const ok = q.kind==='order' ? Q.ord.map(i=>q.words[i]).join(' ')===q.correct : q.answer.includes(key);
+  Q.answered=true; Q.picked=key; Q.lastOk=ok; if(ok) Q.score++;
+  if(q.item && !Q.graded.has(q.item)){ Q.graded.add(q.item); grade(q.item, ok); } else touchStreak();
+  render();
+  const after = q.kind==='order' ? q.say : q.sayAfter; if(after) speak(after);
+}
+function quizEnd(){
+  const pct = Math.round(Q.score/Q.qs.length*100); const m = Q.meta||{};
+  let msg = '';
+  if(m.lessonId && !Q.recorded){ Q.recorded=true; const r = S.lessons[m.lessonId] || {best:0,done:false}; r.best = Math.max(r.best||0, pct); if(pct>=80) r.done=true; S.lessons[m.lessonId]=r; save(); }
+  if(m.lessonId) msg = pct>=80 ? 'Leçon validée. La suivante est débloquée.' : 'Il faut 80 % pour valider. Relis les cartes puis réessaie.';
+  else msg = 'Révision terminée. Les éléments ratés reviendront plus tôt.';
+  return `<div class="card center"><div class="score">${pct} %</div><p>${Q.score} bonne${Q.score>1?'s':''} réponse${Q.score>1?'s':''} sur ${Q.qs.length}</p><p>${msg}</p>
+  <div class="row center">${m.lessonId?`<button class="btn" data-act="lesson" data-arg="${m.lessonId}">Revoir la leçon</button><button class="btn" data-act="quiz" data-arg="${m.lessonId}">Refaire le quiz</button>`:''}<button class="btn primary" data-act="tab" data-arg="home">Retour au parcours</button></div></div>`;
+}
+
+/* ---------- Révision / Progrès ---------- */
+VIEWS.review = () => {
+  const due = dueItems();
+  return `<h1>Révision</h1><div class="card"><p>Chaque élément vu revient selon ta mémoire : une erreur le fait revenir le jour même, une bonne réponse espace les révisions (1 jour, 3 jours, puis de plus en plus).</p><p><b>${due.length}</b> élément${due.length>1?'s':''} à revoir aujourd’hui.</p><button class="btn primary block" data-act="review" ${due.length?'':'disabled'}>Lancer la révision (${Math.min(due.length,15)} questions)</button></div>`;
+};
+function itemLabel(id){
+  const p = id.indexOf('|'); const t=id.slice(0,p), k=id.slice(p+1);
+  if(t==='L' && LETTER[k]) return ar(k,'',true)+` <span class="small muted">${esc(LETTER[k].n)}</span>`;
+  if(t==='G' && SIGN_BY[k]) return esc(SIGN_BY[k].name);
+  if(t==='S' && SYLL_BY[k]) return ar(k,'',true)+` <span class="small muted">${esc(SYLL_BY[k].t)}</span>`;
+  const w = WORD_BY[k]||AL_BY[k]||VOCAB_BY[k]; if(w) return ar(k)+` <span class="small muted">${esc(w.fr)}</span>`;
+  if(t==='C' && VERB_BY[k]) return ar(VERB_BY[k].past)+` <span class="small muted">${esc(VERB_BY[k].fr)}</span>`;
+  if(t==='P' && DATA.sentences[+k]) return `<span class="small">${esc(DATA.sentences[+k].fr)}</span>`;
+  return esc(id);
+}
+function weakItems(){ return Object.entries(S.items).filter(([,it])=>it.ko>0).sort((a,b)=>(b[1].ko/(b[1].ok+b[1].ko))-(a[1].ko/(a[1].ok+a[1].ko)) || b[1].ko-a[1].ko).map(([id])=>id); }
+VIEWS.stats = () => {
+  const items = Object.values(S.items); const ok = items.reduce((s,i)=>s+i.ok,0), ko = items.reduce((s,i)=>s+i.ko,0);
+  const mastered = items.filter(i=>i.int>=7).length; const lessonsDone = LESSONS.filter(l=>isDone(l.id)).length;
+  const weak = weakItems().slice(0,8);
+  let h = `<h1>Progrès</h1><div class="stats"><div class="stat"><b>${S.streak.last>=today()-1?S.streak.n:0}</b>jours d’affilée</div><div class="stat"><b>${lessonsDone}/${LESSONS.length}</b>leçons validées</div><div class="stat"><b>${items.length}</b>éléments vus</div><div class="stat"><b>${mastered}</b>maîtrisés (révision ≥ 7 jours)</div><div class="stat"><b>${ok+ko?Math.round(ok/(ok+ko)*100):0} %</b>taux de réussite</div><div class="stat"><b>${dueItems().length}</b>à revoir aujourd’hui</div></div>`;
+  h += `<div class="card" style="margin-top:12px"><h2>Points faibles</h2>${weak.length?weak.map(id=>{ const it=S.items[id]; return `<div class="weak"><span>${itemLabel(id)}</span><span class="small muted">${it.ko} erreur${it.ko>1?'s':''} / ${it.ok+it.ko}</span></div>`; }).join('')+`<button class="btn primary block" data-act="weak">Travailler mes points faibles</button>`:'<p class="muted">Pas encore d’erreur enregistrée.</p>'}</div>`;
+  return h;
+};
+
+/* ---------- Réglages ---------- */
+VIEWS.settings = () => {
+  const s = S.settings;
+  const voices = TTS.voices.length ? `<select data-set="voice">${TTS.voices.map(v=>`<option value="${esc(v.voiceURI)}" ${TTS.voice&&TTS.voice.voiceURI===v.voiceURI?'selected':''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('')}</select>` : '<span class="small muted">Aucune voix arabe</span>';
+  return `<h1>Réglages</h1>
+  <div class="card"><h2>Affichage</h2>
+   <label class="set">Voyelles courtes (harakat)<input type="checkbox" data-set="harakat" ${s.harakat?'checked':''}></label>
+   <label class="set">Translittération<input type="checkbox" data-set="translit" ${s.translit?'checked':''}></label>
+   <label class="set">Taille de l’arabe <input type="range" min="28" max="72" step="2" value="${s.size}" data-set="size"></label>
+   <div class="center">${ar('كِتَابٌ جَمِيلٌ','mid')}</div>
+   <label class="set">Thème<select data-set="theme"><option value="auto" ${s.theme==='auto'?'selected':''}>Automatique</option><option value="light" ${s.theme==='light'?'selected':''}>Clair</option><option value="dark" ${s.theme==='dark'?'selected':''}>Sombre</option></select></label></div>
+  <div class="card"><h2>Audio</h2>
+   <label class="set">Vitesse<select data-set="rate">${[[0.6,'0,6×'],[0.8,'0,8×'],[1,'1×']].map(([v,l])=>`<option value="${v}" ${s.rate==v?'selected':''}>${l}</option>`).join('')}</select></label>
+   <label class="set">Voix ${voices}</label>
+   <button class="btn sm" data-say="مَرْحَبًا، كَيْفَ حَالُكَ؟">🔊 Tester la voix</button>${voiceHelp()}</div>
+  <div class="card"><h2>Progression</h2>
+   <label class="set">Débloquer tous les modules<input type="checkbox" data-set="unlockAll" ${s.unlockAll?'checked':''}></label>
+   <div class="row"><button class="btn" data-act="export">Exporter (JSON)</button><button class="btn" data-act="import">Importer</button><button class="btn ghost" data-act="reset">Réinitialiser</button></div>
+   <p class="small muted">La progression est enregistrée dans ce navigateur. Exporte-la pour changer d’appareil ou de navigateur.</p></div>
+  <div class="card"><h2>Conversation libre (en ligne)</h2>
+   <label class="set">Clé API Anthropic<input type="password" data-set="apiKey" value="${esc(s.apiKey)}" placeholder="sk-ant-…" autocomplete="off"></label>
+   <label class="set">Modèle<input type="text" data-set="model" value="${esc(s.model)}"></label>
+   <p class="small muted">La clé reste dans ce navigateur, n’est jamais incluse dans l’export, et n’est envoyée qu’à api.anthropic.com. Utilise une clé dédiée avec un plafond de dépenses.</p></div>`;
+};
+
+/* ---------- Dialogues ---------- */
+let D = null;
+const dChoices = (dl, nd) => typeof nd.choices==='string' ? dl.nodes[nd.choices].choices : nd.choices;
+function dlgPath(dl){ const out=[]; let node='start', guard=0; while(node && guard++<30){ const nd=dl.nodes[node]; out.push({who:'npc',...nd.npc}); if(nd.end) break; const c=dChoices(dl,nd).find(x=>x.ok); out.push({who:'me',...c}); node=c.next; } return out; }
+VIEWS.dialogue = () => {
+  const dl = DLG[D.id];
+  let h = `<h1>${esc(dl.title)}</h1><div class="row"><button class="btn sm ${D.mode==='listen'?'on':''}" data-act="dmode" data-arg="listen">🎧 Écoute</button><button class="btn sm ${D.mode==='play'?'on':''}" data-act="dmode" data-arg="play">🎭 Jeu de rôle</button><button class="btn sm" data-act="dfr">${D.showFr?'Masquer':'Afficher'} la traduction</button></div>`;
+  const bubble = (l, who) => `<div class="bubble ${who}"><div class="who">${who==='me'?'Toi':esc(dl.npc)}</div>${ar(l.ar)}<div class="tr small">${esc(l.t)}</div>${D.showFr?`<div class="small">${esc(l.fr)}</div>`:''}<div class="row"><button class="btn sm" data-say="${esc(l.ar)}">🔊</button><button class="btn sm" data-say="${esc(l.ar)}" data-rate="0.55">🐢</button></div></div>`;
+  if(D.mode==='listen'){
+    const path = dlgPath(dl);
+    h += `<button class="btn primary block" data-act="dlisten">▶ Écouter tout le dialogue</button><div class="chat" style="margin-top:12px">${path.map((l,i)=>`<div data-line="${i}" style="display:contents">${bubble(l,l.who)}</div>`).join('')}</div>`;
+    return h;
+  }
+  const nd = dl.nodes[D.node];
+  h += `<div class="chat" style="margin-top:8px">${D.hist.map(x=>bubble(x.npc,'npc')+bubble(x.me,'me')).join('')}${bubble(nd.npc,'npc')}</div>`;
+  if(nd.end){ h += `<div class="card center"><h2>Dialogue terminé</h2><p class="muted">Rejoue-le pour explorer les autres réponses possibles.</p><div class="row center"><button class="btn" data-act="drestart">Rejouer</button><button class="btn primary" data-act="lesson" data-arg="6-1">Autres dialogues</button></div></div>`; }
+  else if(D.pending){ const c=D.pending; h += `<div class="card"><p><b>Bonne réplique.</b> Dis-la à voix haute, enregistre-toi puis compare.</p><div class="center">${ar(c.ar,'mid')}</div><p class="center"><span class="tr">${esc(c.t)}</span> · ${esc(c.fr)}</p>${recBlock(c.ar)}<button class="btn primary block" data-act="dcont">Continuer</button></div>`; }
+  else {
+    if(!D.order[D.node]) D.order[D.node] = shuffle(dChoices(dl,nd).map((c,i)=>i));
+    const cs = dChoices(dl,nd); const wrong = D.wrong[D.node]||[];
+    h += `<p class="small muted">Que réponds-tu ?</p><div class="choices">${D.order[D.node].map(i=>{ const c=cs[i]; return `<button class="choice ${wrong.includes(i)?'ko':''}" data-act="dchoose" data-arg="${i}">${ar(c.ar)}<span class="tr small">${esc(c.t)}</span>${D.showFr?`<span class="fr small">${esc(c.fr)}</span>`:''}</button>`; }).join('')}</div>`;
+    if(D.fb) h += `<div class="fb ko"><b>Pas tout à fait.</b>${esc(D.fb)}</div>`;
+  }
+  if(D.mode==='play' && D.spoken!==D.node){ D.spoken=D.node; AFTER = ()=>setTimeout(()=>speak(nd.npc.ar),300); }
+  return h;
+};
+function startDialogue(id, mode){ D = {id, mode, node:'start', hist:[], pending:null, wrong:{}, order:{}, fb:'', spoken:null, showFr:false}; go('dialogue'); }
+async function dlgListenAll(){
+  const my = ++SEQ; const path = dlgPath(DLG[D.id]);
+  for(let i=0;i<path.length;i++){
+    if(my!==SEQ || VIEW.name!=='dialogue') return;
+    document.querySelectorAll('[data-line] .bubble').forEach(b=>b.style.outline='');
+    const el = document.querySelector(`[data-line="${i}"] .bubble`); if(el){ el.style.outline='3px solid var(--saffron)'; el.scrollIntoView({block:'center',behavior:'smooth'}); }
+    await speak(path[i].ar, undefined, path[i].who==='me'?1.25:1); await sleep(350);
+  }
+  document.querySelectorAll('[data-line] .bubble').forEach(b=>b.style.outline='');
+}
+
+/* ---------- Conversation libre (en ligne) ---------- */
+const THEMES = {presentation:{label:'Se présenter',desc:'se présenter : nom, origine, métier, famille'},cafe:{label:'Au café',desc:'commander une boisson au café'},chemin:{label:'Demander son chemin',desc:'demander son chemin en ville'},libre:{label:'Sujet libre',desc:'conversation libre sur la vie quotidienne'}};
+const CHAT = {theme:'presentation', msgs:[], busy:false};
+const SRClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+VIEWS.chat = () => {
+  let h = `<h1>Conversation libre</h1><div class="card"><p class="small muted">Mode en ligne. Le tuteur répond en arabe littéraire vocalisé, avec translittération, traduction et correction de ta phrase précédente.</p>`;
+  if(!S.settings.apiKey) h += `<p class="warn small">Ajoute ta clé API dans Réglages › Conversation libre.</p><button class="btn" data-act="tab" data-arg="settings">Ouvrir les réglages</button>`;
+  if(!navigator.onLine) h += `<p class="warn small">Pas de connexion : ce mode est indisponible hors ligne.</p>`;
+  h += `<label class="set">Thème<select data-chat="theme">${Object.entries(THEMES).map(([k,v])=>`<option value="${k}" ${CHAT.theme===k?'selected':''}>${esc(v.label)}</option>`).join('')}</select></label>${CHAT.msgs.length?'<button class="btn sm" data-act="chatreset">Nouvelle conversation</button>':''}</div><div class="chat">`;
+  CHAT.msgs.forEach(m=>{
+    if(m.hidden) return;
+    if(m.role==='user') h += `<div class="bubble me">${hasAr(m.content)?`<span class="ar">${esc(m.content)}</span>`:esc(m.content)}</div>`;
+    else { const o=m.obj||{}; if(o.correction) h += `<div class="corr">✏️ ${esc(o.correction)}</div>`; h += `<div class="bubble npc">${o.ar?ar(o.ar)+`<div class="tr small">${esc(o.tr||'')}</div>`:''}<div class="small">${esc(o.fr||'')}</div>${o.ar?`<div class="row"><button class="btn sm" data-say="${esc(o.ar)}">🔊</button><button class="btn sm" data-say="${esc(o.ar)}" data-rate="0.55">🐢</button></div>`:''}</div>`; }
+  });
+  if(CHAT.busy) h += `<div class="bubble npc muted">…</div>`;
+  h += `</div>`;
+  if(!CHAT.msgs.length) h += `<button class="btn primary block" data-act="chatstart" ${S.settings.apiKey?'':'disabled'}>Commencer la conversation</button>`;
+  else h += `<div class="chatbar"><input id="chatIn" dir="auto" placeholder="Écris en arabe, en translittération ou en français" autocomplete="off" ${CHAT.busy?'disabled':''}>${SRClass?'<button class="btn" data-act="chatmic" aria-label="Dicter en arabe">🎙</button>':''}<button class="btn primary" data-act="chatsend" ${CHAT.busy?'disabled':''}>Envoyer</button></div>`;
+  AFTER = () => { const i=$('#chatIn'); if(i && !CHAT.busy) i.focus(); };
+  return h;
+};
+async function chatCall(){
+  const sys = `Tu es un tuteur d’arabe littéraire (fuṣḥā) bienveillant pour un adulte francophone débutant (niveau A1). Thème : ${THEMES[CHAT.theme].desc}. L’apprenant écrit en arabe, en translittération ou en français. Réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni balises Markdown, de la forme {"ar":"…","tr":"…","fr":"…","correction":"…"}. "ar" : ta réplique en arabe littéraire ENTIÈREMENT vocalisée, 1 à 2 phrases courtes, terminée par une question simple pour relancer. "tr" : translittération latine. "fr" : traduction française. "correction" : si le dernier message de l’apprenant contient une erreur ou est en français, la formulation correcte en arabe vocalisé suivie d’une explication courte en français ; sinon une chaîne vide. Vocabulaire simple et fréquent. Tutoie l’apprenant au masculin.`;
+  const res = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':S.settings.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:S.settings.model,max_tokens:700,system:sys,messages:CHAT.msgs.map(m=>({role:m.role,content:m.role==='assistant'?m.raw:m.content}))})});
+  if(!res.ok){ const t = await res.text(); throw new Error(`${res.status} ${t.slice(0,160)}`); }
+  const data = await res.json();
+  const raw = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
+  let obj; try{ obj = JSON.parse(raw.replace(/```json|```/g,'').trim()); }catch(e){ obj = {ar:'',tr:'',fr:raw,correction:''}; }
+  return {raw, obj};
+}
+async function chatSend(text, hidden){
+  if(CHAT.busy) return;
+  if(!S.settings.apiKey){ toast('Ajoute ta clé API dans Réglages.'); return; }
+  if(!navigator.onLine){ toast('Pas de connexion.'); return; }
+  CHAT.msgs.push({role:'user',content:text,hidden}); CHAT.busy=true; render();
+  try{ const r = await chatCall(); CHAT.msgs.push({role:'assistant',raw:r.raw,obj:r.obj}); CHAT.busy=false; render(); if(r.obj.ar) speak(r.obj.ar); }
+  catch(err){ CHAT.msgs.pop(); CHAT.busy=false; render(); const i=$('#chatIn'); if(i && !hidden) i.value=text; toast('Échec de l’envoi : '+err.message); }
+}
+function chatMic(){
+  try{ const r = new SRClass(); r.lang='ar-SA'; r.interimResults=false; r.onresult = e=>{ const i=$('#chatIn'); if(i) i.value = e.results[0][0].transcript; }; r.onerror = ()=>toast('Dictée indisponible (connexion requise).'); r.start(); toast('Parle maintenant…'); }catch(e){ toast('Dictée indisponible.'); }
+}
+
+/* ---------- Tracé des lettres ---------- */
+function openTrace(c){
+  const L = LETTER[c]; const m = $('#modal');
+  m.innerHTML = `<div class="sheet" role="dialog" aria-label="Tracer ${esc(L.n)}"><div class="row between"><h2>Tracer ${ar(c,'sm',true)} <span class="small muted">${esc(L.n)}</span></h2><button class="btn ghost" data-act="close" aria-label="Fermer">✕</button></div><p class="small muted">Suis le modèle avec le doigt. Écris de droite à gauche et place les points à la fin.</p><canvas class="trace" width="480" height="480"></canvas><div class="row center"><button class="btn" data-act="tclear">Effacer</button><button class="btn primary" data-act="tcheck">Vérifier</button><button class="btn" data-say="${esc(L.s)}">🔊</button></div><div id="tracefb"></div></div>`;
+  m.classList.add('on');
+  const cv = m.querySelector('canvas'), ctx = cv.getContext('2d');
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const font = `300px ${css('--ar-font')}`;
+  const T = {c, strokes:[], cur:null, cv, ctx, font};
+  const drawGuide = (g, color, extra) => { g.save(); g.font=font; g.textAlign='center'; g.textBaseline='alphabetic'; g.direction='rtl'; const mt=g.measureText(c); const h=(mt.actualBoundingBoxAscent||200)+(mt.actualBoundingBoxDescent||0); const y = 240 + h/2 - (mt.actualBoundingBoxDescent||0); g.fillStyle=color; g.fillText(c,240,y); if(extra){ g.lineWidth=extra; g.strokeStyle=color; g.lineJoin='round'; g.strokeText(c,240,y);} g.restore(); };
+  T.redraw = () => { ctx.clearRect(0,0,480,480); drawGuide(ctx, css('--line')); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineWidth=16; ctx.strokeStyle=css('--accent'); T.strokes.forEach(s=>{ ctx.beginPath(); s.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); if(s.length===1) ctx.lineTo(s[0][0]+.1,s[0][1]); ctx.stroke(); }); };
+  T.drawGuide = drawGuide;
+  const pos = e => { const r=cv.getBoundingClientRect(); return [(e.clientX-r.left)*480/r.width, (e.clientY-r.top)*480/r.height]; };
+  cv.addEventListener('pointerdown', e=>{ cv.setPointerCapture(e.pointerId); T.cur=[pos(e)]; T.strokes.push(T.cur); T.redraw(); });
+  cv.addEventListener('pointermove', e=>{ if(!T.cur) return; T.cur.push(pos(e)); T.redraw(); });
+  const end = ()=>{ T.cur=null; }; cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  window.TRACE = T; T.redraw();
+}
+function checkTrace(){
+  const T = window.TRACE; if(!T || !T.strokes.length){ toast('Trace d’abord la lettre.'); return; }
+  const N=120, k=N/480;
+  const mk = () => { const c=document.createElement('canvas'); c.width=c.height=N; const g=c.getContext('2d'); g.scale(k,k); return g; };
+  const gGuide=mk(), gDil=mk(), gThin=mk(), gThick=mk();
+  T.drawGuide(gGuide,'#000'); T.drawGuide(gDil,'#000',44);
+  const strokeAll = (g,w) => { g.lineCap='round'; g.lineJoin='round'; g.lineWidth=w; g.strokeStyle='#000'; T.strokes.forEach(s=>{ g.beginPath(); s.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); if(s.length===1) g.lineTo(s[0][0]+.1,s[0][1]); g.stroke(); }); };
+  strokeAll(gThin,16); strokeAll(gThick,52);
+  const px = g => g.getImageData(0,0,N,N).data;
+  const A=px(gGuide), B=px(gDil), U=px(gThin), V=px(gThick);
+  let guide=0, cov=0, user=0, prec=0;
+  for(let i=3;i<A.length;i+=4){ if(A[i]>100){ guide++; if(V[i]>100) cov++; } if(U[i]>100){ user++; if(B[i]>100) prec++; } }
+  const c = guide?cov/guide:0, p = user?prec/user:0; const score = Math.round(Math.min(c,p)*100);
+  const msg = score>=70 ? 'Très bien.' : score>=45 ? 'Pas mal. Repasse plus près du modèle.' : 'Essaie encore en suivant bien le modèle.';
+  $('#tracefb').innerHTML = `<div class="fb ${score>=70?'ok':score>=45?'':'ko'}"><b>${msg}</b><span class="small">Couverture ${Math.round(c*100)} % · précision ${Math.round(p*100)} %. L’ordre des traits n’est pas vérifié.</span></div>`;
+}
+
+/* =========================================================================
+   ÉVÉNEMENTS
+   ========================================================================= */
+document.addEventListener('click', e=>{
+  const sayEl = e.target.closest('[data-say]');
+  if(sayEl && !sayEl.disabled){ SEQ++; speak(sayEl.dataset.say, sayEl.dataset.rate ? +sayEl.dataset.rate : undefined); }
+  if(e.target.id==='modal'){ closeModal(); return; }
+  const el = e.target.closest('[data-act]'); if(!el || el.disabled) return;
+  const a = el.dataset.act, arg = el.dataset.arg;
+  switch(a){
+    case 'tab': tab(arg); break;
+    case 'back': back(); break;
+    case 'go': go(arg); break;
+    case 'lesson': go('lesson',{id:arg}); break;
+    case 'quiz': startQuiz(buildQuiz(lessonById(arg)),{lessonId:arg}); break;
+    case 'review': startQuiz(dueItems().slice(0,15).map(qForItem),{review:true}); break;
+    case 'weak': startQuiz(weakItems().slice(0,12).map(qForItem),{review:true}); break;
+    case 'ans': answer(arg); break;
+    case 'next': Q.i++; Q.answered=false; Q.picked=null; Q.ord=[]; window.scrollTo(0,0); render(); break;
+    case 'ordpick': Q.ord.push(+arg); render(); break;
+    case 'ordundo': Q.ord.splice(+arg,1); render(); break;
+    case 'ordcheck': answer(null); break;
+    case 'wsel': VIEW.params.sel=+arg; render(); break;
+    case 'readseq': readSeq(); break;
+    case 'verb': VIEW.params.v=+arg; render(); break;
+    case 'tense': VIEW.params.t=arg; render(); break;
+    case 'sword': { const [si,wi]=arg.split(':').map(Number); VIEW.params.open=VIEW.params.open||{}; VIEW.params.open[si] = VIEW.params.open[si]===wi?null:wi; render(); const w=DATA.sentences[si].words[wi]; if(VIEW.params.open[si]!=null) speak(w[0]); break; }
+    case 'sbare': VIEW.params.bare=VIEW.params.bare||{}; VIEW.params.bare[arg]=!VIEW.params.bare[arg]; render(); break;
+    case 'trace': openTrace(arg); break;
+    case 'tclear': if(window.TRACE){ window.TRACE.strokes=[]; window.TRACE.redraw(); $('#tracefb').innerHTML=''; } break;
+    case 'tcheck': checkTrace(); break;
+    case 'close': closeModal(); break;
+    case 'rec': toggleRec(el.closest('.rec')); break;
+    case 'me': { const b=el.closest('.rec'); if(b.dataset.me) playUrl(b.dataset.me); break; }
+    case 'ab': { const b=el.closest('.rec'); (async()=>{ await speak(b.dataset.model); await sleep(300); if(b.dataset.me) await playUrl(b.dataset.me); })(); break; }
+    case 'dlg': { const [id,mode]=arg.split(':'); startDialogue(id,mode); break; }
+    case 'dmode': D.mode=arg; D.spoken=null; SEQ++; render(); break;
+    case 'dfr': D.showFr=!D.showFr; render(); break;
+    case 'dlisten': dlgListenAll(); break;
+    case 'dchoose': { const dl=DLG[D.id], nd=dl.nodes[D.node], c=dChoices(dl,nd)[+arg]; if(c.ok){ D.pending=c; D.fb=''; render(); speak(c.ar); } else { (D.wrong[D.node]=D.wrong[D.node]||[]).push(+arg); D.fb=c.why||''; render(); } break; }
+    case 'dcont': { const dl=DLG[D.id]; D.hist.push({npc:dl.nodes[D.node].npc, me:D.pending}); D.node=D.pending.next; D.pending=null; D.fb=''; if(dl.nodes[D.node].end){ S.dialogues[D.id]=true; if(DATA.dialogues.every(d=>S.dialogues[d.id])) S.lessons['6-1']={done:true,best:100}; save(); touchStreak(); } render(); break; }
+    case 'drestart': startDialogue(D.id,'play'); HIST.pop(); break;
+    case 'chatstart': chatSend('Commence la conversation.', true); break;
+    case 'chatsend': { const i=$('#chatIn'); const t=i&&i.value.trim(); if(t) chatSend(t); break; }
+    case 'chatmic': chatMic(); break;
+    case 'chatreset': CHAT.msgs=[]; render(); break;
+    case 'export': exportProgress(); break;
+    case 'import': $('#importFile').click(); break;
+    case 'reset': if(confirm('Effacer toute la progression ? Les réglages sont conservés.')){ S.lessons={}; S.items={}; S.streak={n:0,last:-1}; S.dialogues={}; save(); toast('Progression effacée.'); render(); } break;
+  }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Enter' && e.target.id==='chatIn'){ e.preventDefault(); const t=e.target.value.trim(); if(t) chatSend(t); } if(e.key==='Escape') closeModal(); });
+document.addEventListener('change', e=>{
+  const el = e.target;
+  if(el.dataset.set){ const k=el.dataset.set; let v = el.type==='checkbox' ? el.checked : el.value; if(k==='size'||k==='rate') v=+v; S.settings[k]=v; save(); applySettings(); if(k==='voice') loadVoices(); if(!['apiKey','model','size'].includes(k)) render(); }
+  if(el.dataset.chat==='theme'){ CHAT.theme=el.value; }
+  if(el.id==='importFile' && el.files[0]){ const r=new FileReader(); r.onload=()=>{ try{ const o=JSON.parse(r.result); if(!o || typeof o!=='object' || !o.items) throw 0; const key=S.settings.apiKey; S=merge(o); S.settings.apiKey=key; save(); applySettings(); toast('Progression importée.'); render(); }catch(err){ toast('Fichier invalide : ce n’est pas un export Alif.'); } el.value=''; }; r.readAsText(el.files[0]); }
+});
+document.addEventListener('input', e=>{ if(e.target.dataset.set==='size'){ S.settings.size=+e.target.value; applySettings(); } });
+function closeModal(){ const m=$('#modal'); m.classList.remove('on'); m.innerHTML=''; window.TRACE=null; }
+async function readSeq(){
+  if(!READER) return; const my = ++SEQ; const box=$('#rw'); if(!box) return; const spans=[...box.querySelectorAll('.seg')];
+  if(!READER.wholeOnly){ for(let i=0;i<spans.length;i++){ if(my!==SEQ) return; spans.forEach(s=>s.classList.remove('hl')); spans[i].classList.add('hl'); await speak(READER.segs[i].s, S.settings.rate*0.85); await sleep(200); } }
+  if(my!==SEQ) return; spans.forEach(s=>s.classList.add('hl')); await speak(READER.whole); spans.forEach(s=>s.classList.remove('hl'));
+}
+function exportProgress(){
+  const o = clone(S); delete o.settings.apiKey;
+  const d = new Date(); const name = `alif-progression-${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.json`;
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(o,null,1)],{type:'application/json'})); a.download = name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+/* =========================================================================
+   DÉMARRAGE
+   ========================================================================= */
+applySettings(); loadVoices();
+if('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => { const before=TTS.ok; loadVoices(); TTS.checked=true; if(before!==TTS.ok && ['home','settings'].includes(VIEW.name)) render(); };
+setTimeout(()=>{ loadVoices(); TTS.checked=true; if(['home','settings'].includes(VIEW.name)) render(); }, 1200);
+window.addEventListener('online', ()=>{ if(VIEW.name==='chat') render(); });
+window.addEventListener('offline', ()=>{ if(VIEW.name==='chat') render(); });
+render();
+
+// Mise en cache hors ligne (sans effet en local file:// ; actif une fois hébergée en https://)
+if('serviceWorker' in navigator && location.protocol!=='file:'){
+  navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
